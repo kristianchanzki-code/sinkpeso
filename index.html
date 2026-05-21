@@ -748,15 +748,12 @@ e('footer', {
             const spendPercentage = totals.totalIncome > 0 ? (totals.totalDailySpent + totals.paidBills) / totals.totalIncome : 0;
 
             return e('div', null,
-                e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 } },
-                    e('div', null,
-                        e('h1', { style: { fontSize: 28, fontWeight: 800, color: "var(--text-main)" } }, "Financial Position"),
-                        e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, "Simple visual breakdown of your cash health")
+                e('div', { style: { marginBottom: 20 } },
+                    e('div', { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 5 } },
+                        e('h1', { style: { fontSize: "clamp(18px, 5vw, 24px)", fontWeight: 800, color: "var(--text-main)", lineHeight: 1.1 } }, "Financial Position"),
+                        e('div', { style: { background: totals.healthStatus.bg, color: totals.healthStatus.color, border: `1px solid ${totals.healthStatus.color}30`, padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" } }, totals.healthStatus.label)
                     ),
-                    e('div', { style: { display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 } },
-                        e(SLabel, null, "Cash Flow Health"),
-                        e('div', { style: { background: totals.healthStatus.bg, color: totals.healthStatus.color, border: `1px solid ${totals.healthStatus.color}20`, padding: "8px 18px", borderRadius: 12, fontSize: 13, fontWeight: 700 } }, totals.healthStatus.label)
-                    )
+                    e('div', { style: { fontSize: 13, color: "var(--text-muted)" } }, "Simple visual breakdown of your cash health")
                 ),
 
                 e('div', { className: "dashboard-grid" },
