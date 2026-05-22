@@ -70,7 +70,7 @@
         
         @media (max-width: 900px) { 
             .dashboard-grid { grid-template-columns: 1fr; gap: 16px; } 
-            .category-box-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .category-box-grid { grid-template-columns: 1fr; gap: 12px; }
         }
         
         /* ── MOBILE NAV FIX ── */
@@ -81,8 +81,8 @@
             .nav-logo-text { font-size: 14px !important; }
         }
 
-        .tf { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
-        @media (max-width: 680px) { .tf > * { width: 100% !important; flex: none !important; } }
+        .tf { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+        @media (max-width: 680px) { .tf > div, .tf > button { width: 100% !important; } }
         
         /* ── PREMIUM PANEL ── */
         .premium-panel { 
@@ -166,8 +166,7 @@
         .modal-overlay { position: fixed; inset: 0; background: var(--modal-bg); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
         .modal-container { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
         @media (max-width: 600px) {
-            .modal-overlay { align-items: flex-end; padding: 0; }
-            .modal-container { padding: 24px 16px 32px; border-radius: 22px 22px 0 0; max-width: 100%; border-bottom: none; }
+            .modal-container { padding: 20px 16px; border-radius: 18px; }
         }
         
         .pin-screen { position: fixed; inset: 0; background: var(--bg-body); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
@@ -222,7 +221,7 @@
         .cat-btn.selected { border-color: #00E676; color: #00E676; background: rgba(0,230,118,0.08); }
 
         /* ── SAFE SPEND CHIP ── */
-        .safe-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); color: #00E676; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-top: 14px; flex-wrap: wrap; }
+        .safe-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); color: #00E676; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-top: 14px; }
 
         /* ── EMPTY STATE ── */
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; color: var(--text-muted); gap: 10px; }
@@ -281,10 +280,7 @@
             );
         }
         function Field({ label, children }) { return e('div', { style: { marginBottom: 20 } }, e('div', { style: { fontSize: 12, fontWeight: 600, color: "var(--text-light)", marginBottom: 8, letterSpacing: "0.03em" } }, label), children); }
-        function Inp(p) { 
-            const extra = p.type === "number" ? { inputMode: "decimal" } : {};
-            return e('input', { ...extra, ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); 
-        }
+        function Inp(p) { return e('input', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
         function Sel({ children, ...p }) { return e('select', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 48, ...(p.style || {}) } }, children); }
         function Btn({ children, v = "primary", style = {}, ...p }) {
             const vs = {
@@ -324,7 +320,7 @@
                         e('div', { style: { fontSize: 16, fontWeight: 800, color: "var(--text-main)" } }, "Quick Add Expense"),
                         e('button', { onClick: onClose, style: { background: "var(--hover-bg)", border: "none", color: "var(--text-light)", width: 32, height: 32, borderRadius: 8, cursor: "pointer", fontSize: 16 } }, "✕")
                     ),
-                    e('input', { className: "quick-add-amount", type: "number", inputMode: "decimal", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
+                    e('input', { className: "quick-add-amount", type: "number", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
                     e('div', { className: "cat-grid" },
                         CATEGORIES.map(c => e('button', { key: c, className: "cat-btn" + (category === c ? " selected" : ""), onClick: () => setCategory(c) },
                             e('div', { style: { fontSize: 18, marginBottom: 3 } }, catIcons[c] || "💰"),
@@ -358,10 +354,15 @@
                 e('h1', { style: { marginBottom: 6, color: "#00E676", fontSize: 28, fontWeight: 900, letterSpacing: "0.06em" } }, "SINKPESO"),
                 e('p', { style: { color: "var(--text-muted)", marginBottom: 32, fontSize: 13, letterSpacing: "0.01em" } }, "Private. Offline. Yours."),
                 e('input', { 
-                    type: "password", className: "pin-input", value: input, autoFocus: true,
-                    onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '')),
+                    type: "password", 
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    autoComplete: "off",
+                    maxLength: 6,
+                    className: "pin-input", value: input, autoFocus: true,
+                    onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '').slice(0, 6)),
                     onKeyDown: e => e.key === 'Enter' && handleAttempt(),
-                    style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none" }
+                    style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none", textAlign: "center", letterSpacing: "0.3em" }
                 }),
                 e(Btn, { v: "primary", style: { marginTop: 16, width: 240 }, onClick: handleAttempt }, "Unlock App"),
                 // Footer
@@ -529,7 +530,7 @@
                         ),
                         e('div', { style: { display: "flex", gap: 6, alignItems: "center", flexShrink: 0 } },
                             settings.pin && e('button', { onClick: () => setIsUnlocked(false), style: { background: "rgba(239,68,68,0.1)", border: "none", color: "#EF4444", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🔒 Lock"),
-                            e('button', { onClick: () => setShowCloseModal(true), style: { background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)", color: "#A855F7", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🗓 Archive"),
+                            e('button', { onClick: () => setShowCloseModal(true), style: { background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)", color: "#A855F7", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🗓 Close"),
                             e('button', { 
                                 onClick: () => setTab("settings"), 
                                 title: "Settings",
@@ -567,7 +568,7 @@
                     )
                 ),
                 
-                e('div', { className: "page-wrap", style: { maxWidth: 1140, margin: "0 auto", padding: "clamp(12px, 3vw, 32px) clamp(10px, 3vw, 24px) 80px" } },
+                e('div', { className: "page-wrap", style: { maxWidth: 1140, margin: "0 auto", padding: "clamp(16px, 4vw, 32px) clamp(12px, 4vw, 24px) 80px" } },
                     tab === "dashboard" && e(DashboardOverview, { totals, bills, dailyExpenses, budgets, fc }),
                     tab === "limits" && e(BudgetLimitsView, { budgets, setBudgets, fc }),
                     tab === "budget" && e(BudgetBillsView, { incomes, setIncomes, bills, setBills, fc }),
@@ -603,7 +604,7 @@ e('footer', {
                         { id: "dashboard", icon: "🏠", label: "Home" },
                         { id: "daily",     icon: "💸", label: "Expenses" },
                         { id: "budget",    icon: "🧾", label: "Bills" },
-                        { id: "goals",     icon: "🏦", label: "Savings" },
+                        { id: "goals",     icon: "🏦", label: "Vaults" },
                         { id: "more",      icon: "⋯",  label: "More" }
                     ].map(t => e('button', {
                         key: t.id,
@@ -658,7 +659,7 @@ e('footer', {
                         e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 } },
                             e('div', null,
                                 e('div', { style: { fontSize: 24, marginBottom: 6 } }, "🗓"),
-                                e('h3', { style: { fontSize: 18, fontWeight: 800, color: "var(--text-main)" } }, "Archive & Start New Month"),
+                                e('h3', { style: { fontSize: 18, fontWeight: 800, color: "var(--text-main)" } }, "Close This Month"),
                                 e('div', { style: { fontSize: 13, color: "var(--text-muted)", marginTop: 4 } },
                                     new Date().toLocaleDateString("en-PH", { month: "long", year: "numeric" })
                                 )
@@ -713,6 +714,12 @@ e('footer', {
         // ── NEW MODULE: SETTINGS (Data Backup & Preferences) ─────────────────
         function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }) {
             const [pinInput, setPinInput] = useState(settings.pin);
+            const [pinSaved, setPinSaved] = useState(false);
+            const handleSavePin = () => {
+                setSettings({...settings, pin: pinInput});
+                setPinSaved(true);
+                setTimeout(() => setPinSaved(false), 3000);
+            };
 
             const handleExport = () => {
                 const data = {
@@ -758,8 +765,19 @@ e('footer', {
                             Object.keys(CURRENCIES).map(c => e('option', { key: c, value: c }, c))
                         )),
                         e('div', { style: { borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 16 } },
-                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
-                            e(Btn, { v: "accent", onClick: () => setSettings({...settings, pin: pinInput}) }, "Save PIN")
+                            e(Field, { label: "App PIN Lock (Numeric, max 6 digits)" }, e(Inp, { 
+                                type: "password", 
+                                inputMode: "numeric",
+                                pattern: "[0-9]*",
+                                autoComplete: "off",
+                                maxLength: 6,
+                                placeholder: "Leave blank to disable", 
+                                value: pinInput, 
+                                style: { textAlign: "center", letterSpacing: "0.25em" },
+                                onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '').slice(0, 6)) 
+                            })),
+                            e(Btn, { v: "accent", onClick: handleSavePin }, "Save PIN"),
+                            pinSaved && e('div', { style: { marginTop: 10, fontSize: 13, fontWeight: 700, color: "#00E676", display: "flex", alignItems: "center", gap: 6 } }, "✓ PIN successfully set!")
                         )
                     ),
                     e('div', { className: "premium-panel" },
@@ -800,7 +818,7 @@ e('footer', {
                 e('div', { className: "dashboard-grid" },
                     e('div', { style: { display: "flex", flexDirection: "column", gap: 24 } },
                         e('div', { className: "balance-gradient-card" },
-                            e(SLabel, { style: { color: "var(--text-light)", marginBottom: 6 } }, "Available This Month"),
+                            e(SLabel, { style: { color: "var(--text-light)", marginBottom: 6 } }, "Money left to spend"),
                             e('div', { style: { fontSize: 38, fontWeight: 800, color: "#00E676" } }, fc(totals.netAvailable)),
                             (() => {
                                 const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
