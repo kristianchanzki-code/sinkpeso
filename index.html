@@ -185,9 +185,10 @@
         @media (max-width: 768px) { .bottom-nav { display: flex; } }
         @media (max-width: 768px) { .desktop-tabs { display: none !important; } }
         @media (max-width: 768px) { .page-wrap { padding-bottom: 88px !important; } }
-        .bnav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: none; border: none; cursor: pointer; padding: 7px 2px 4px; color: var(--text-muted); font-size: 10px; font-weight: 700; letter-spacing: 0.02em; transition: color 0.15s; min-width: 0; }
+        .bnav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: none; border: none; cursor: pointer; padding: 7px 2px 4px; color: var(--text-muted); font-size: 10px; font-weight: 700; letter-spacing: 0.02em; transition: color 0.15s; min-width: 0; }
         .bnav-btn.active { color: #00E676; }
-        .bnav-btn .bni { font-size: 22px; line-height: 1; margin-bottom: 1px; }
+        .bnav-btn svg { opacity: 0.7; transition: opacity 0.15s; }
+        .bnav-btn.active svg { opacity: 1; }
 
         /* ── FLOATING ACTION BUTTON ── */
         .fab { position: fixed; right: 20px; width: 54px; height: 54px; border-radius: 50%; background: #00E676; color: #030712; border: none; font-size: 26px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,230,118,0.45); z-index: 180; transition: transform 0.18s, box-shadow 0.18s; bottom: 88px; }
@@ -242,6 +243,39 @@
     <script>
         const { useState, useMemo, useEffect, useRef } = React;
         const e = React.createElement;
+
+        // ── SHARED STYLE TOKENS ───────────────────────────────────────────────
+        const S = {
+            row:       { display:"flex", alignItems:"center" },
+            rowBetween:{ display:"flex", alignItems:"center", justifyContent:"space-between" },
+            col:       { display:"flex", flexDirection:"column" },
+            chip: (bg, color, border) => ({ display:"inline-flex", alignItems:"center", gap:6, background:bg, color, border:`1px solid ${border}`, padding:"6px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }),
+            iconBtn:   { background:"transparent", border:"1px solid var(--border)", color:"var(--text-muted)", width:34, height:34, borderRadius:10, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all 0.2s", flexShrink:0 },
+            pageTitle: { fontSize:22, fontWeight:800, marginBottom:4 },
+            muted:     { fontSize:14, color:"var(--text-muted)" },
+        };
+
+        // ── LUCIDE SVG ICON PRIMITIVE ─────────────────────────────────────────
+        // Inline SVG so zero network requests, zero dependencies
+        const ICONS = {
+            home:     "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
+            wallet:   "M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5 M16 12h.01",
+            receipt:  "M4 2h16v20l-8-4-8 4z",
+            landmark: "M3 22h18 M6 18V11 M10 18V11 M14 18V11 M18 18V11 M12 2L2 7h20z",
+            settings: "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
+            lock:     "M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z M7 11V7a5 5 0 0110 0v4",
+            plus:     "M12 5v14 M5 12h14",
+            archive:  "M21 8v13H3V8 M1 3h22v5H1z M10 12h4",
+            grid:     "M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z",
+            list:     "M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01",
+            history:  "M12 8v4l3 3 M3.05 11a9 9 0 109.9-8.95",
+            more:     "M5 12h.01 M12 12h.01 M19 12h.01",
+        };
+        function Icon({ name, size = 18, color = "currentColor", style: st = {} }) {
+            return e('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: color, strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", style: { flexShrink: 0, ...st } },
+                ...ICONS[name].split(" M").map((seg, i) => e('path', { key: i, d: (i === 0 ? "" : "M") + seg }))
+            );
+        }
 
         const FUND_E = ["💰", "💼", "📈", "🔌", "🏠", "🛡️", "☕", "🛒", "📱", "🚗", "🎁", "✈️"];
         const CATEGORIES = ["Food", "Gas", "Bills", "Business", "Personal", "Savings"];
@@ -354,15 +388,10 @@
                 e('h1', { style: { marginBottom: 6, color: "#00E676", fontSize: 28, fontWeight: 900, letterSpacing: "0.06em" } }, "SINKPESO"),
                 e('p', { style: { color: "var(--text-muted)", marginBottom: 32, fontSize: 13, letterSpacing: "0.01em" } }, "Private. Offline. Yours."),
                 e('input', { 
-                    type: "password", 
-                    inputMode: "numeric",
-                    pattern: "[0-9]*",
-                    autoComplete: "off",
-                    maxLength: 6,
-                    className: "pin-input", value: input, autoFocus: true,
-                    onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '').slice(0, 6)),
+                    type: "password", className: "pin-input", value: input, autoFocus: true,
+                    onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '')),
                     onKeyDown: e => e.key === 'Enter' && handleAttempt(),
-                    style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none", textAlign: "center", letterSpacing: "0.3em" }
+                    style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none" }
                 }),
                 e(Btn, { v: "primary", style: { marginTop: 16, width: 240 }, onClick: handleAttempt }, "Unlock App"),
                 // Footer
@@ -529,13 +558,16 @@
                             e('div', { style: { fontWeight: 900, color: "#FFFFFF", fontSize: 16 }, className: "nav-logo-text" }, 'SINKPESO')
                         ),
                         e('div', { style: { display: "flex", gap: 6, alignItems: "center", flexShrink: 0 } },
-                            settings.pin && e('button', { onClick: () => setIsUnlocked(false), style: { background: "rgba(239,68,68,0.1)", border: "none", color: "#EF4444", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🔒 Lock"),
-                            e('button', { onClick: () => setShowCloseModal(true), style: { background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)", color: "#A855F7", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🗓 Close"),
+                            settings.pin && e('button', { onClick: () => setIsUnlocked(false), style: S.chip("rgba(239,68,68,0.1)", "#EF4444", "transparent") },
+                                e(Icon, { name: "lock", size: 14 }), "Lock"
+                            ),
+                            e('button', { onClick: () => setShowCloseModal(true), style: S.chip("rgba(168,85,247,0.12)", "#A855F7", "rgba(168,85,247,0.25)") },
+                                e(Icon, { name: "archive", size: 14 }), "Archive"
+                            ),
                             e('button', { 
-                                onClick: () => setTab("settings"), 
-                                title: "Settings",
-                                style: { background: tab === "settings" ? "var(--hover-bg)" : "transparent", border: "1px solid var(--border)", color: tab === "settings" ? "var(--text-main)" : "var(--text-muted)", width: 34, height: 34, borderRadius: 10, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", flexShrink: 0 }
-                            }, "⚙️")
+                                onClick: () => setTab("settings"), title: "Settings",
+                                style: { ...S.iconBtn, background: tab === "settings" ? "var(--hover-bg)" : "transparent", color: tab === "settings" ? "var(--text-main)" : "var(--text-muted)" }
+                            }, e(Icon, { name: "settings", size: 16 }))
                         )
                     ),
 
@@ -596,22 +628,22 @@ e('footer', {
                 toast && e('div', { className: "toast" }, toast),
 
                 // ── FLOATING QUICK ADD BUTTON ───────────────────────────────
-                e('button', { className: "fab", title: "Quick Add Expense", onClick: () => setShowQuickAdd(true) }, "+"),
+                e('button', { className: "fab", title: "Quick Add Expense", onClick: () => setShowQuickAdd(true) }, e(Icon, { name: "plus", size: 26, color: "#030712" })),
 
                 // ── MOBILE BOTTOM NAV ───────────────────────────────────────
                 e('div', { className: "bottom-nav" },
                     [
-                        { id: "dashboard", icon: "🏠", label: "Home" },
-                        { id: "daily",     icon: "💸", label: "Expenses" },
-                        { id: "budget",    icon: "🧾", label: "Bills" },
-                        { id: "goals",     icon: "🏦", label: "Vaults" },
-                        { id: "more",      icon: "⋯",  label: "More" }
+                        { id: "dashboard", icon: "home",    label: "Home" },
+                        { id: "daily",     icon: "wallet",  label: "Expenses" },
+                        { id: "budget",    icon: "receipt", label: "Bills" },
+                        { id: "goals",     icon: "landmark",label: "Savings" },
+                        { id: "more",      icon: "more",    label: "More" }
                     ].map(t => e('button', {
                         key: t.id,
                         className: "bnav-btn" + (tab === t.id || (t.id === "more" && ["limits","transactions","history","settings"].includes(tab)) ? " active" : ""),
                         onClick: () => t.id === "more" ? setShowMoreSheet(true) : setTab(t.id)
                     },
-                        e('span', { className: "bni" }, t.icon),
+                        e(Icon, { name: t.icon, size: 22 }),
                         e('span', null, t.label)
                     ))
                 ),
@@ -621,19 +653,19 @@ e('footer', {
                     e('div', { className: "sheet-panel", onClick: ev => ev.stopPropagation() },
                         e('div', { className: "sheet-handle" }),
                         [
-                            { id: "limits",       icon: "🎯", label: "Budget Limits",  sub: "Set spending caps per category" },
-                            { id: "transactions", icon: "📋", label: "Vault Logs",      sub: "Deposit & withdrawal history" },
-                            { id: "history",      icon: "🗂️", label: "Month History",   sub: "Archived monthly snapshots" },
-                            { id: "settings",     icon: "⚙️", label: "Settings",        sub: "Preferences, PIN, backup" },
+                            { id: "limits",       icon: "grid",    label: "Budget Limits",  sub: "Set spending caps per category" },
+                            { id: "transactions", icon: "list",    label: "Vault Logs",      sub: "Deposit & withdrawal history" },
+                            { id: "history",      icon: "history", label: "Month History",   sub: "Archived monthly snapshots" },
+                            { id: "settings",     icon: "settings",label: "Settings",        sub: "Preferences, PIN, backup" },
                         ].map(t => e('div', { key: t.id, className: "sheet-row", onClick: () => { setTab(t.id); setShowMoreSheet(false); } },
-                            e('span', { className: "sheet-row-icon" }, t.icon),
+                            e('span', { className: "sheet-row-icon" }, e(Icon, { name: t.icon, size: 22, color: "var(--text-light)" })),
                             e('div', null,
                                 e('div', { className: "sheet-row-label" }, t.label),
                                 e('div', { className: "sheet-row-sub" }, t.sub)
                             )
                         )),
                         e('div', { className: "sheet-row", style: { color: "#A855F7" }, onClick: () => { setShowMoreSheet(false); setShowCloseModal(true); } },
-                            e('span', { className: "sheet-row-icon" }, "🗓"),
+                            e('span', { className: "sheet-row-icon" }, e(Icon, { name: "archive", size: 22, color: "#A855F7" })),
                             e('div', null,
                                 e('div', { className: "sheet-row-label", style: { color: "#A855F7" } }, "Archive & Start New Month"),
                                 e('div', { className: "sheet-row-sub" }, "Save snapshot, reset monthly data")
@@ -714,12 +746,6 @@ e('footer', {
         // ── NEW MODULE: SETTINGS (Data Backup & Preferences) ─────────────────
         function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }) {
             const [pinInput, setPinInput] = useState(settings.pin);
-            const [pinSaved, setPinSaved] = useState(false);
-            const handleSavePin = () => {
-                setSettings({...settings, pin: pinInput});
-                setPinSaved(true);
-                setTimeout(() => setPinSaved(false), 3000);
-            };
 
             const handleExport = () => {
                 const data = {
@@ -765,19 +791,8 @@ e('footer', {
                             Object.keys(CURRENCIES).map(c => e('option', { key: c, value: c }, c))
                         )),
                         e('div', { style: { borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 16 } },
-                            e(Field, { label: "App PIN Lock (Numeric, max 6 digits)" }, e(Inp, { 
-                                type: "password", 
-                                inputMode: "numeric",
-                                pattern: "[0-9]*",
-                                autoComplete: "off",
-                                maxLength: 6,
-                                placeholder: "Leave blank to disable", 
-                                value: pinInput, 
-                                style: { textAlign: "center", letterSpacing: "0.25em" },
-                                onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '').slice(0, 6)) 
-                            })),
-                            e(Btn, { v: "accent", onClick: handleSavePin }, "Save PIN"),
-                            pinSaved && e('div', { style: { marginTop: 10, fontSize: 13, fontWeight: 700, color: "#00E676", display: "flex", alignItems: "center", gap: 6 } }, "✓ PIN successfully set!")
+                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
+                            e(Btn, { v: "accent", onClick: () => setSettings({...settings, pin: pinInput}) }, "Save PIN")
                         )
                     ),
                     e('div', { className: "premium-panel" },
