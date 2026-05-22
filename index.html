@@ -246,13 +246,19 @@
 
         // ── SHARED STYLE TOKENS ───────────────────────────────────────────────
         const S = {
-            row:       { display:"flex", alignItems:"center" },
-            rowBetween:{ display:"flex", alignItems:"center", justifyContent:"space-between" },
-            col:       { display:"flex", flexDirection:"column" },
+            row:        { display:"flex", alignItems:"center" },
+            row8:       { display:"flex", alignItems:"center", gap:8 },
+            row10:      { display:"flex", alignItems:"center", gap:10 },
+            row12:      { display:"flex", alignItems:"center", gap:12 },
+            rowBetween: { display:"flex", alignItems:"center", justifyContent:"space-between" },
+            col:        { display:"flex", flexDirection:"column" },
             chip: (bg, color, border) => ({ display:"inline-flex", alignItems:"center", gap:6, background:bg, color, border:`1px solid ${border}`, padding:"6px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }),
-            iconBtn:   { background:"transparent", border:"1px solid var(--border)", color:"var(--text-muted)", width:34, height:34, borderRadius:10, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all 0.2s", flexShrink:0 },
-            pageTitle: { fontSize:22, fontWeight:800, marginBottom:4 },
-            muted:     { fontSize:14, color:"var(--text-muted)" },
+            iconBtn:    { background:"transparent", border:"1px solid var(--border)", color:"var(--text-muted)", width:34, height:34, borderRadius:10, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all 0.2s", flexShrink:0 },
+            pageTitle:  { fontSize:22, fontWeight:800, marginBottom:4 },
+            muted:      { fontSize:14, color:"var(--text-muted)" },
+            modalFooter:{ display:"flex", gap:12, marginTop:24 },
+            formFooter: { display:"flex", gap:12, marginTop:8 },
+            pageHeader: { display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 },
         };
 
         // ── LUCIDE SVG ICON PRIMITIVE ─────────────────────────────────────────
@@ -314,7 +320,7 @@
             );
         }
         function Field({ label, children }) { return e('div', { style: { marginBottom: 20 } }, e('div', { style: { fontSize: 12, fontWeight: 600, color: "var(--text-light)", marginBottom: 8, letterSpacing: "0.03em" } }, label), children); }
-        function Inp(p) { const numericProps = p.type === "number" ? { inputMode: "decimal", pattern: "[0-9]*" } : {}; return e('input', { ...numericProps, ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
+        function Inp(p) { return e('input', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
         function Sel({ children, ...p }) { return e('select', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 48, ...(p.style || {}) } }, children); }
         function Btn({ children, v = "primary", style = {}, ...p }) {
             const vs = {
@@ -354,7 +360,7 @@
                         e('div', { style: { fontSize: 16, fontWeight: 800, color: "var(--text-main)" } }, "Quick Add Expense"),
                         e('button', { onClick: onClose, style: { background: "var(--hover-bg)", border: "none", color: "var(--text-light)", width: 32, height: 32, borderRadius: 8, cursor: "pointer", fontSize: 16 } }, "✕")
                     ),
-                    e('input', { className: "quick-add-amount", type: "number", inputMode: "decimal", pattern: "[0-9]*", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
+                    e('input', { className: "quick-add-amount", type: "number", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
                     e('div', { className: "cat-grid" },
                         CATEGORIES.map(c => e('button', { key: c, className: "cat-btn" + (category === c ? " selected" : ""), onClick: () => setCategory(c) },
                             e('div', { style: { fontSize: 18, marginBottom: 3 } }, catIcons[c] || "💰"),
@@ -388,7 +394,7 @@
                 e('h1', { style: { marginBottom: 6, color: "#00E676", fontSize: 28, fontWeight: 900, letterSpacing: "0.06em" } }, "SINKPESO"),
                 e('p', { style: { color: "var(--text-muted)", marginBottom: 32, fontSize: 13, letterSpacing: "0.01em" } }, "Private. Offline. Yours."),
                 e('input', { 
-                    type: "password", inputMode: "numeric", pattern: "[0-9]*", className: "pin-input", value: input, autoFocus: true,
+                    type: "password", className: "pin-input", value: input, autoFocus: true,
                     onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '')),
                     onKeyDown: e => e.key === 'Enter' && handleAttempt(),
                     style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none" }
@@ -553,7 +559,7 @@
 
                     // ── ROW 1: Logo + Action Buttons ──────────────────────────
                     e('div', { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", gap: 8 } },
-                        e('div', { style: { display: "flex", alignItems: "center", gap: 10 } },
+                        e('div', { style: S.row10 },
                             e('img', { src: "logosinkpeso.png", alt: "Logo", style: { height: 30, width: "auto", objectFit: "contain" } }),
                             e('div', { style: { fontWeight: 900, color: "#FFFFFF", fontSize: 16 }, className: "nav-logo-text" }, 'SINKPESO')
                         ),
@@ -608,7 +614,7 @@
                     tab === "goals" && e(SinkingFundsView, { funds, setFunds, enrichedFunds: totals.enrichedFunds, txns, setTxns, fc }),
                     tab === "transactions" && e(TransactionsView, { txns, setTxns, funds, fc }),
                     tab === "history" && e(HistoryView, { archives, fc }),
-                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }),
+                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }),
 
 e('footer', { 
                     style: { 
@@ -744,7 +750,7 @@ e('footer', {
         }
 
         // ── NEW MODULE: SETTINGS (Data Backup & Preferences) ─────────────────
-        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }) {
+        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }) {
             const [pinInput, setPinInput] = useState(settings.pin);
 
             const handleExport = () => {
@@ -791,8 +797,8 @@ e('footer', {
                             Object.keys(CURRENCIES).map(c => e('option', { key: c, value: c }, c))
                         )),
                         e('div', { style: { borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 16 } },
-                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", inputMode: "numeric", pattern: "[0-9]*", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
-                            e(Btn, { v: "accent", onClick: () => { setSettings({...settings, pin: pinInput}); showToast("✓ PIN successfully set!"); } }, "Save PIN")
+                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
+                            e(Btn, { v: "accent", onClick: () => setSettings({...settings, pin: pinInput}) }, "Save PIN")
                         )
                     ),
                     e('div', { className: "premium-panel" },
@@ -957,7 +963,7 @@ e('footer', {
                     budgets.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "🎯"), e("div", { className: "empty-state-title" }, "No limits set"), e("div", { className: "empty-state-sub" }, "Set monthly caps to keep spending in check."))) :
                     budgets.map(b => e('div', { key: b.id, className: "stream-row" },
                         e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, b.category), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2 } }, "Monthly Limit")),
-                        e('div', { style: { display: "flex", alignItems: "center", gap: 10 } },
+                        e('div', { style: S.row10 },
                             e('div', { style: { fontWeight: 700, color: "var(--text-main)" } }, fc(b.limitCents)),
                             e(DotMenu, { itemId: b.id, openMenu, setOpenMenu, onEdit: () => openEditBudget(b), onDelete: () => deleteBudget(b.id) })
                         )
@@ -967,7 +973,7 @@ e('footer', {
                     e('h3', { style: { fontSize: 18, fontWeight: 800, marginBottom: 20 } }, "Edit Limit"),
                     e(Field, { label: "Category" }, e(Sel, { value: editForm.category, onChange: ev => setEditForm({ ...editForm, category: ev.target.value }) }, CATEGORIES.map(c => e('option', { key: c, value: c }, c)))),
                     e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editForm.limit, onChange: ev => setEditForm({ ...editForm, limit: ev.target.value }) })),
-                    e('div', { style: { display: "flex", gap: 12, marginTop: 8 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditBudget(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditBudget }, "Save"))
+                    e('div', { style: S.formFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditBudget(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditBudget }, "Save"))
                 ))
             );
         }
@@ -1003,7 +1009,7 @@ e('footer', {
                         incomes.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "10px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "📥"), e("div", { className: "empty-state-title" }, "No income added"), e("div", { className: "empty-state-sub" }, "Add a salary, freelance, or any cash in."))) :
                         incomes.map(i => e('div', { key: i.id, className: "stream-row" },
                             e('div', null, e('div', { style: { fontWeight: 600 } }, i.name), e('div', { style: { fontSize: 11, color: "var(--text-muted)" } }, i.date)),
-                            e('div', { style: { display: "flex", alignItems: "center", gap: 10 } }, e('div', { style: { color: "#00E676", fontWeight: 700 } }, `+${fc(i.amountCents)}`), e(DotMenu, { itemId: i.id, openMenu: openMenuInc, setOpenMenu: setOpenMenuInc, onEdit: () => openEditIncome(i), onDelete: () => deleteIncome(i.id) }))
+                            e('div', { style: S.row10 }, e('div', { style: { color: "#00E676", fontWeight: 700 } }, `+${fc(i.amountCents)}`), e(DotMenu, { itemId: i.id, openMenu: openMenuInc, setOpenMenu: setOpenMenuInc, onEdit: () => openEditIncome(i), onDelete: () => deleteIncome(i.id) }))
                         ))
                     ),
                     // BILLS
@@ -1032,13 +1038,13 @@ e('footer', {
                             }
                             return e('div', { key: b.id, className: "stream-row" },
                                 e('div', null,
-                                    e('div', { style: { display: "flex", alignItems: "center", gap: 8 } },
+                                    e('div', { style: S.row8 },
                                         e('div', { style: { fontWeight: 600, textDecoration: b.isPaid ? "line-through" : "none", color: b.isPaid ? "var(--text-muted)" : "var(--text-main)" } }, b.name),
                                         isRecurring && e('span', { style: { fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 5, background: "rgba(99,102,241,0.15)", color: "#818CF8" } }, b.recurring === "weekly" ? "📅 W" : "🔄 M")
                                     ),
                                     e('div', { style: { fontSize: 11, color: uColor, fontWeight: days <= 3 && !b.isPaid ? 700 : 500 } }, `Due: ${b.dueDate} • ${b.category || "Bills"}`)
                                 ),
-                                e('div', { style: { display: "flex", alignItems: "center", gap: 10 } },
+                                e('div', { style: S.row10 },
                                     e('span', { style: { fontWeight: 700, color: b.isPaid ? "var(--text-muted)" : "var(--text-main)" } }, fc(b.amountCents)),
                                     e('button', { onClick: () => setBills(bills.map(x => x.id === b.id ? { ...x, isPaid: !x.isPaid } : x)), style: { background: b.isPaid ? "rgba(0, 230, 118, 0.15)" : "var(--hover-bg)", color: b.isPaid ? "#00E676" : "var(--text-main)", border: "none", padding: "6px 14px", borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: "pointer" } }, b.isPaid ? "Paid" : "Pay"),
                                     e(DotMenu, { itemId: b.id, openMenu: openMenuBill, setOpenMenu: setOpenMenuBill, onEdit: () => openEditBill(b), onDelete: () => deleteBill(b.id) })
@@ -1078,10 +1084,10 @@ e('footer', {
                     dailyExpenses.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "💸"), e("div", { className: "empty-state-title" }, "No expenses yet"), e("div", { className: "empty-state-sub" }, "Tap + to log your first expense."))) :
                     dailyExpenses.map(exp => e('div', { key: exp.id, className: "stream-row" },
                         e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, exp.name), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2 } }, `${exp.date} • ${exp.category}`)),
-                        e('div', { style: { display: "flex", alignItems: "center", gap: 10 } }, e('div', { style: { fontWeight: 700, color: "#EF4444" } }, `-${fc(exp.amountCents)}`), e(DotMenu, { itemId: exp.id, openMenu, setOpenMenu, onEdit: () => openEditExp(exp), onDelete: () => deleteExp(exp.id) }))
+                        e('div', { style: S.row10 }, e('div', { style: { fontWeight: 700, color: "#EF4444" } }, `-${fc(exp.amountCents)}`), e(DotMenu, { itemId: exp.id, openMenu, setOpenMenu, onEdit: () => openEditExp(exp), onDelete: () => deleteExp(exp.id) }))
                     ))
                 ),
-                editExp && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Expense"), e(Field, { label: "Description" }, e(Inp, { value: editForm.name, onChange: ev => setEditForm({ ...editForm, name: ev.target.value }) })), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editForm.amount, onChange: ev => setEditForm({ ...editForm, amount: ev.target.value }) })), e(Field, { label: "Category" }, e(Sel, { value: editForm.category, onChange: ev => setEditForm({ ...editForm, category: ev.target.value }) }, CATEGORIES.map(c => e('option', { key: c, value: c }, c)))), e('div', { style: { display: "flex", gap: 12, marginTop: 8 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditExp(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditExp }, "Save"))))
+                editExp && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Expense"), e(Field, { label: "Description" }, e(Inp, { value: editForm.name, onChange: ev => setEditForm({ ...editForm, name: ev.target.value }) })), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editForm.amount, onChange: ev => setEditForm({ ...editForm, amount: ev.target.value }) })), e(Field, { label: "Category" }, e(Sel, { value: editForm.category, onChange: ev => setEditForm({ ...editForm, category: ev.target.value }) }, CATEGORIES.map(c => e('option', { key: c, value: c }, c)))), e('div', { style: S.formFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditExp(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditExp }, "Save"))))
             );
         }
 
@@ -1108,13 +1114,13 @@ e('footer', {
             const deleteVault = (id) => { if (window.confirm("Delete this vault? All linked transactions will also be removed.")) { setFunds(funds.filter(f => f.id !== id)); setTxns(txns.filter(t => t.fundId !== id)); } };
 
             return e('div', null,
-                e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 } }, e('div', null, e('h2', { style: { fontSize: 22, fontWeight: 800 } }, 'Savings Vaults'), e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, 'Isolate cash balances cleanly.')), e(Btn, { v: "accent", onClick: () => setModal(true) }, "+ Create New Vault")),
+                e('div', { style: S.pageHeader }, e('div', null, e('h2', { style: { fontSize: 22, fontWeight: 800 } }, 'Savings Vaults'), e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, 'Isolate cash balances cleanly.')), e(Btn, { v: "accent", onClick: () => setModal(true) }, "+ Create New Vault")),
                 enrichedFunds.length === 0 ? e('div', { className: "premium-panel", style: { textAlign: "center", padding: "40px 0", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "🏦"), e("div", { className: "empty-state-title" }, "No Savings Vaults yet"), e("div", { className: "empty-state-sub" }, "Create a vault to isolate money for a specific goal."))) :
-                e('div', { className: "vaults-grid" }, enrichedFunds.map(f => e('div', { key: f.id, className: "premium-panel", style: { display: "flex", flexDirection: "column", justifyContent: "space-between" } }, e('div', null, e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 } }, e('span', { style: { fontSize: 28 } }, f.emoji), e('div', { style: { display: "flex", alignItems: "center", gap: 8 } }, e('span', { style: { fontSize: 12, fontWeight: 700, color: f.pct >= 1 ? "#00E676" : "#2563EB", background: f.pct >= 1 ? "rgba(0,230,118,0.1)" : "rgba(37,99,235,0.1)", padding: "4px 10px", borderRadius: 8 } }, f.pct >= 1 ? "Fully Funded" : `${Math.round(f.pct * 100)}%`), e(DotMenu, { itemId: f.id, openMenu, setOpenMenu, onEdit: () => openEditVault(f), onDelete: () => deleteVault(f.id) }))), e('h3', { style: { fontSize: 18, fontWeight: 700, color: "var(--text-main)" } }, f.name), e('div', { style: { display: "flex", justifyContent: "space-between", margin: "14px 0 6px", fontSize: 14 } }, e('span', { style: { fontWeight: 700, color: "var(--text-main)" } }, fc(f.bal)), e('span', { style: { color: "var(--text-muted)" } }, `Target: ${fc(f.goalCents)}`)), e(PBar, { pct: f.pct, color: f.pct >= 1 ? "#00E676" : "#2563EB" })), e('div', { style: { display: "flex", gap: 10, marginTop: 20 } }, e(Btn, { v: "ghost", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'withdrawal', fund: f }) }, "Withdraw"), e(Btn, { v: "primary", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'deposit', fund: f }) }, "Deposit"))))),
+                e('div', { className: "vaults-grid" }, enrichedFunds.map(f => e('div', { key: f.id, className: "premium-panel", style: { display: "flex", flexDirection: "column", justifyContent: "space-between" } }, e('div', null, e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 } }, e('span', { style: { fontSize: 28 } }, f.emoji), e('div', { style: S.row8 }, e('span', { style: { fontSize: 12, fontWeight: 700, color: f.pct >= 1 ? "#00E676" : "#2563EB", background: f.pct >= 1 ? "rgba(0,230,118,0.1)" : "rgba(37,99,235,0.1)", padding: "4px 10px", borderRadius: 8 } }, f.pct >= 1 ? "Fully Funded" : `${Math.round(f.pct * 100)}%`), e(DotMenu, { itemId: f.id, openMenu, setOpenMenu, onEdit: () => openEditVault(f), onDelete: () => deleteVault(f.id) }))), e('h3', { style: { fontSize: 18, fontWeight: 700, color: "var(--text-main)" } }, f.name), e('div', { style: { display: "flex", justifyContent: "space-between", margin: "14px 0 6px", fontSize: 14 } }, e('span', { style: { fontWeight: 700, color: "var(--text-main)" } }, fc(f.bal)), e('span', { style: { color: "var(--text-muted)" } }, `Target: ${fc(f.goalCents)}`)), e(PBar, { pct: f.pct, color: f.pct >= 1 ? "#00E676" : "#2563EB" })), e('div', { style: { display: "flex", gap: 10, marginTop: 20 } }, e(Btn, { v: "ghost", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'withdrawal', fund: f }) }, "Withdraw"), e(Btn, { v: "primary", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'deposit', fund: f }) }, "Deposit"))))),
                 
-                modal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Setup Target Vault"), e(Field, { label: "Pick Icon Graphic" }, e(Sel, { value: form.emoji, onChange: ev => setForm({ ...form, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: form.name, onChange: ev => setForm({ ...form, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: form.goal, onChange: ev => setForm({ ...form, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: form.start, onChange: ev => setForm({ ...form, start: ev.target.value }) })), e('div', { style: { display: "flex", gap: 12, marginTop: 24 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setModal(false) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: handleCreateVault }, "Initialize Vault")))),
-                editVault && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Vault"), e(Field, { label: "Pick Icon" }, e(Sel, { value: editVaultForm.emoji, onChange: ev => setEditVaultForm({ ...editVaultForm, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: editVaultForm.name, onChange: ev => setEditVaultForm({ ...editVaultForm, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: editVaultForm.goal, onChange: ev => setEditVaultForm({ ...editVaultForm, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: editVaultForm.start, onChange: ev => setEditVaultForm({ ...editVaultForm, start: ev.target.value }) })), e('div', { style: { display: "flex", gap: 12, marginTop: 24 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditVault(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditVault }, "Save Changes")))),
-                actionModal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8, textTransform: "capitalize" } }, `${actionModal.type} — ${actionModal.fund.name}`), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Current balance held: ${fc(actionModal.fund.bal)}`), e(Field, { label: `Amount to ${actionModal.type}` }, e(Inp, { type: "number", value: actionAmt, autoFocus: true, onChange: ev => setActionAmt(ev.target.value) })), e('div', { style: { display: "flex", gap: 12, marginTop: 24 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setActionModal(null) }, "Back"), e(Btn, { v: actionModal.type === 'deposit' ? 'primary' : 'danger', style: { flex: 1 }, onClick: handleLogVaultTxn }, `Commit ${actionModal.type}`))))
+                modal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Setup Target Vault"), e(Field, { label: "Pick Icon Graphic" }, e(Sel, { value: form.emoji, onChange: ev => setForm({ ...form, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: form.name, onChange: ev => setForm({ ...form, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: form.goal, onChange: ev => setForm({ ...form, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: form.start, onChange: ev => setForm({ ...form, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setModal(false) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: handleCreateVault }, "Initialize Vault")))),
+                editVault && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Vault"), e(Field, { label: "Pick Icon" }, e(Sel, { value: editVaultForm.emoji, onChange: ev => setEditVaultForm({ ...editVaultForm, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: editVaultForm.name, onChange: ev => setEditVaultForm({ ...editVaultForm, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: editVaultForm.goal, onChange: ev => setEditVaultForm({ ...editVaultForm, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: editVaultForm.start, onChange: ev => setEditVaultForm({ ...editVaultForm, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditVault(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditVault }, "Save Changes")))),
+                actionModal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8, textTransform: "capitalize" } }, `${actionModal.type} — ${actionModal.fund.name}`), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Current balance held: ${fc(actionModal.fund.bal)}`), e(Field, { label: `Amount to ${actionModal.type}` }, e(Inp, { type: "number", value: actionAmt, autoFocus: true, onChange: ev => setActionAmt(ev.target.value) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setActionModal(null) }, "Back"), e(Btn, { v: actionModal.type === 'deposit' ? 'primary' : 'danger', style: { flex: 1 }, onClick: handleLogVaultTxn }, `Commit ${actionModal.type}`))))
             );
         }
 
@@ -1133,9 +1139,9 @@ e('footer', {
                 
                 e('div', { className: "premium-panel" },
                     txns.length === 0 ? e('div', { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "📋"), e("div", { className: "empty-state-title" }, "No vault activity yet"), e("div", { className: "empty-state-sub" }, "Deposits and withdrawals will appear here."))) :
-                    txns.map(t => e('div', { key: t.id, className: "stream-row" }, e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, getVaultName(t.fundId)), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2, textTransform: "capitalize" } }, `${t.date} • ${t.type}`)), e('div', { style: { display: "flex", alignItems: "center", gap: 12 } }, e('span', { style: { fontWeight: 700, color: t.type === 'deposit' ? "#00E676" : "#EF4444" } }, t.type === 'deposit' ? `+${fc(t.amountCents)}` : `-${fc(t.amountCents)}`), e(DotMenu, { itemId: t.id, openMenu, setOpenMenu, onEdit: () => openEditTxn(t), onDelete: () => deleteTxn(t.id) }))))
+                    txns.map(t => e('div', { key: t.id, className: "stream-row" }, e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, getVaultName(t.fundId)), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2, textTransform: "capitalize" } }, `${t.date} • ${t.type}`)), e('div', { style: S.row12 }, e('span', { style: { fontWeight: 700, color: t.type === 'deposit' ? "#00E676" : "#EF4444" } }, t.type === 'deposit' ? `+${fc(t.amountCents)}` : `-${fc(t.amountCents)}`), e(DotMenu, { itemId: t.id, openMenu, setOpenMenu, onEdit: () => openEditTxn(t), onDelete: () => deleteTxn(t.id) }))))
                 ),
-                editTxn && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8 } }, "Edit Vault Transaction"), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Vault: ${getVaultName(editTxn.fundId)}`), e(Field, { label: "Transaction Type" }, e(Sel, { value: editTxnForm.type, onChange: ev => setEditTxnForm({ ...editTxnForm, type: ev.target.value }) }, e('option', { value: "deposit" }, "Deposit"), e('option', { value: "withdrawal" }, "Withdrawal"))), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editTxnForm.amount, onChange: ev => setEditTxnForm({ ...editTxnForm, amount: ev.target.value }) })), e(Field, { label: "Date" }, e(Inp, { type: "date", value: editTxnForm.date, onChange: ev => setEditTxnForm({ ...editTxnForm, date: ev.target.value }) })), e('div', { style: { display: "flex", gap: 12, marginTop: 8 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditTxn(null) }, "Cancel"), e(Btn, { v: "primary", style: { flex: 1 }, onClick: saveEditTxn }, "Save Changes"))))
+                editTxn && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8 } }, "Edit Vault Transaction"), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Vault: ${getVaultName(editTxn.fundId)}`), e(Field, { label: "Transaction Type" }, e(Sel, { value: editTxnForm.type, onChange: ev => setEditTxnForm({ ...editTxnForm, type: ev.target.value }) }, e('option', { value: "deposit" }, "Deposit"), e('option', { value: "withdrawal" }, "Withdrawal"))), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editTxnForm.amount, onChange: ev => setEditTxnForm({ ...editTxnForm, amount: ev.target.value }) })), e(Field, { label: "Date" }, e(Inp, { type: "date", value: editTxnForm.date, onChange: ev => setEditTxnForm({ ...editTxnForm, date: ev.target.value }) })), e('div', { style: S.formFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditTxn(null) }, "Cancel"), e(Btn, { v: "primary", style: { flex: 1 }, onClick: saveEditTxn }, "Save Changes"))))
             );
         }
 
@@ -1151,7 +1157,7 @@ e('footer', {
             const maxVal = Math.max(1, ...chartData.flatMap(a => [a.totalIncome, a.totalSpent]));
 
             return e('div', null,
-                e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 } }, e('div', null, e('h2', { style: { fontSize: 22, fontWeight: 800 } }, 'Month History'), e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, 'Archived snapshots and trend lines.')), e('div', { style: { fontSize: 13, color: "var(--text-muted)", fontWeight: 600 } }, `${archives.length} archives`)),
+                e('div', { style: S.pageHeader }, e('div', null, e('h2', { style: { fontSize: 22, fontWeight: 800 } }, 'Month History'), e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, 'Archived snapshots and trend lines.')), e('div', { style: { fontSize: 13, color: "var(--text-muted)", fontWeight: 600 } }, `${archives.length} archives`)),
 
                 archives.length > 0 && e('div', { className: "premium-panel" },
                     e(SLabel, { style: { marginBottom: 12 } }, "Spending vs Income Trends (Last 6 Months)"),
