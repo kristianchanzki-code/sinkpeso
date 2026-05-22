@@ -70,7 +70,7 @@
         
         @media (max-width: 900px) { 
             .dashboard-grid { grid-template-columns: 1fr; gap: 16px; } 
-            .category-box-grid { grid-template-columns: 1fr; gap: 12px; }
+            .category-box-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
         
         /* ── MOBILE NAV FIX ── */
@@ -81,8 +81,8 @@
             .nav-logo-text { font-size: 14px !important; }
         }
 
-        .tf { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
-        @media (max-width: 680px) { .tf > div, .tf > button { width: 100% !important; } }
+        .tf { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+        @media (max-width: 680px) { .tf > * { width: 100% !important; flex: none !important; } }
         
         /* ── PREMIUM PANEL ── */
         .premium-panel { 
@@ -166,7 +166,8 @@
         .modal-overlay { position: fixed; inset: 0; background: var(--modal-bg); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
         .modal-container { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
         @media (max-width: 600px) {
-            .modal-container { padding: 20px 16px; border-radius: 18px; }
+            .modal-overlay { align-items: flex-end; padding: 0; }
+            .modal-container { padding: 24px 16px 32px; border-radius: 22px 22px 0 0; max-width: 100%; border-bottom: none; }
         }
         
         .pin-screen { position: fixed; inset: 0; background: var(--bg-body); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
@@ -221,7 +222,7 @@
         .cat-btn.selected { border-color: #00E676; color: #00E676; background: rgba(0,230,118,0.08); }
 
         /* ── SAFE SPEND CHIP ── */
-        .safe-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); color: #00E676; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-top: 14px; }
+        .safe-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); color: #00E676; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-top: 14px; flex-wrap: wrap; }
 
         /* ── EMPTY STATE ── */
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; color: var(--text-muted); gap: 10px; }
@@ -229,20 +230,18 @@
         .empty-state-title { font-size: 15px; font-weight: 700; color: var(--text-light); }
         .empty-state-sub { font-size: 13px; max-width: 260px; line-height: 1.5; }
 </style>
-<link rel="apple-touch-icon" href="image_534b4c.png">
-    <link rel="icon" href="image_534b4c.png" type="image/png">
+    <link rel="apple-touch-icon" href="logosinkpeso.png">
+    <link rel="icon" href="logosinkpeso.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="apple-touch-icon" href="logosinkpeso.png">
-    <link rel="icon" href="logosinkpeso.png" type="image/png">
 </head>
 <body>
     <div id="root"></div>
 
     <script>
-        const { useState, useMemo, useEffect } = React;
+        const { useState, useMemo, useEffect, useRef } = React;
         const e = React.createElement;
 
         const FUND_E = ["💰", "💼", "📈", "🔌", "🏠", "🛡️", "☕", "🛒", "📱", "🚗", "🎁", "✈️"];
@@ -282,7 +281,10 @@
             );
         }
         function Field({ label, children }) { return e('div', { style: { marginBottom: 20 } }, e('div', { style: { fontSize: 12, fontWeight: 600, color: "var(--text-light)", marginBottom: 8, letterSpacing: "0.03em" } }, label), children); }
-        function Inp(p) { return e('input', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
+        function Inp(p) { 
+            const extra = p.type === "number" ? { inputMode: "decimal" } : {};
+            return e('input', { ...extra, ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); 
+        }
         function Sel({ children, ...p }) { return e('select', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 48, ...(p.style || {}) } }, children); }
         function Btn({ children, v = "primary", style = {}, ...p }) {
             const vs = {
@@ -322,7 +324,7 @@
                         e('div', { style: { fontSize: 16, fontWeight: 800, color: "var(--text-main)" } }, "Quick Add Expense"),
                         e('button', { onClick: onClose, style: { background: "var(--hover-bg)", border: "none", color: "var(--text-light)", width: 32, height: 32, borderRadius: 8, cursor: "pointer", fontSize: 16 } }, "✕")
                     ),
-                    e('input', { className: "quick-add-amount", type: "number", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
+                    e('input', { className: "quick-add-amount", type: "number", inputMode: "decimal", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
                     e('div', { className: "cat-grid" },
                         CATEGORIES.map(c => e('button', { key: c, className: "cat-btn" + (category === c ? " selected" : ""), onClick: () => setCategory(c) },
                             e('div', { style: { fontSize: 18, marginBottom: 3 } }, catIcons[c] || "💰"),
@@ -369,12 +371,33 @@
             );
         }
 
+        // ── ERROR BOUNDARY ────────────────────────────────────────────────────
+        class ErrorBoundary extends React.Component {
+            constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+            static getDerivedStateFromError(error) { return { hasError: true, error }; }
+            componentDidCatch(error, info) { console.error("SINKPESO crash:", error, info); }
+            render() {
+                if (this.state.hasError) {
+                    return e('div', { style: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: 24, fontFamily: "Inter, sans-serif" } },
+                        e('div', { style: { fontSize: 48, marginBottom: 16 } }, "⚠️"),
+                        e('h2', { style: { color: "#EF4444", marginBottom: 8, fontWeight: 800 } }, "Something went wrong"),
+                        e('p', { style: { color: "#64748B", marginBottom: 24, textAlign: "center", maxWidth: 360 } }, "Your data is safe in localStorage. Try reloading the page."),
+                        e('button', { onClick: () => window.location.reload(), style: { background: "#2563EB", color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 14, fontWeight: 700, cursor: "pointer" } }, "Reload App")
+                    );
+                }
+                return this.props.children;
+            }
+        }
+
         // ── CORE APPLICATION ──────────────────────────────────────────────────
         function App() {
             const [tab, setTab] = useState("dashboard");
 
             const defaultSettings = { currency: 'PHP', theme: 'dark', pin: '' };
-            const [settings, setSettings] = useState(() => JSON.parse(localStorage.getItem("sp_settings")) || defaultSettings);
+            const [settings, setSettings] = useState(() => {
+                try { return JSON.parse(localStorage.getItem("sp_settings")) || defaultSettings; }
+                catch { return defaultSettings; }
+            });
             const [isUnlocked, setIsUnlocked] = useState(!settings.pin);
 
             const [funds, setFunds] = useState(() => JSON.parse(localStorage.getItem("sp_funds") || "[]"));
@@ -425,8 +448,7 @@
                 const catSum = { Food: 0, Gas: 0, Bills: 0, Business: 0, Personal: 0, Savings: totalInGoals };
                 dailyExpenses.forEach(exp => { catSum[exp.category] = (catSum[exp.category] || 0) + exp.amountCents; });
                 bills.filter(b => b.isPaid).forEach(b => { 
-                    const cat = b.category || "Bills";
-                    catSum[cat] = (catSum[cat] || 0) + b.amountCents; 
+                    catSum["Bills"] = (catSum["Bills"] || 0) + b.amountCents; 
                 });
 
                 let healthStatus = { label: "🟢 Optimal", color: "#00E676", bg: "rgba(0, 230, 118, 0.1)" };
@@ -444,18 +466,24 @@
             const [showMoreSheet, setShowMoreSheet] = useState(false);
             const [showQuickAdd, setShowQuickAdd]   = useState(false);
             const [toast, setToast] = useState(null);
-            const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2600); };
+            const toastTimer = useRef(null);
+            const showToast = (msg) => {
+                if (toastTimer.current) clearTimeout(toastTimer.current);
+                setToast(msg);
+                toastTimer.current = setTimeout(() => setToast(null), 2600);
+            };
 
             if (!isUnlocked) return e(PinScreen, { targetPin: settings.pin, onUnlock: () => setIsUnlocked(true) });
 
             const handleCloseMonth = () => {
                 const now = new Date();
                 const monthLabel = now.toLocaleDateString("en-PH", { month: "long", year: "numeric" });
-                const totalIncome = incomes.reduce((s, i) => s + i.amountCents, 0);
-                const totalBills  = bills.reduce((s, b) => s + (b.isPaid ? b.amountCents : 0), 0);
-                const totalSpent  = dailyExpenses.reduce((s, x) => s + x.amountCents, 0);
+                // FIX #4: use totals.* directly instead of recalculating
+                const totalIncome  = totals.totalIncome;
+                const totalBills   = totals.paidBills;
+                const totalSpent   = totals.totalDailySpent;
                 const totalSavings = totals.totalInGoals;
-                const remaining   = totalIncome - totalBills - totalSpent - totalSavings;
+                const remaining    = totals.netAvailable;
 
                 const archive = {
                     id: uid(),
@@ -465,14 +493,27 @@
                     snapshot: {
                         incomes: [...incomes],
                         bills:   [...bills],
-                        dailyExpenses: [...dailyExpenses]
+                        dailyExpenses: [...dailyExpenses],
+                        funds: [...funds],
+                        txns:  [...txns]
                     }
                 };
 
                 setArchives(prev => [archive, ...prev]);
                 setDailyExpenses([]);
                 setIncomes([]);
-                setBills(prev => prev.map(b => ({ ...b, isPaid: false })));
+                // FIX #2: advance dueDate for recurring bills, then reset isPaid
+                setBills(prev => prev.map(b => {
+                    let nextDue = b.dueDate;
+                    if (b.recurrence === "monthly" && b.dueDate) {
+                        nextDue = addMonths(b.dueDate, 1);
+                    } else if (b.recurrence === "weekly" && b.dueDate) {
+                        const d = new Date(b.dueDate + "T00:00:00");
+                        d.setDate(d.getDate() + 7);
+                        nextDue = d.toISOString().slice(0, 10);
+                    }
+                    return { ...b, isPaid: false, dueDate: nextDue };
+                }));
                 setShowCloseModal(false);
                 showToast("✓ Month archived. Fresh start!");
             };
@@ -488,7 +529,7 @@
                         ),
                         e('div', { style: { display: "flex", gap: 6, alignItems: "center", flexShrink: 0 } },
                             settings.pin && e('button', { onClick: () => setIsUnlocked(false), style: { background: "rgba(239,68,68,0.1)", border: "none", color: "#EF4444", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🔒 Lock"),
-                            e('button', { onClick: () => setShowCloseModal(true), style: { background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)", color: "#A855F7", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🗓 Close"),
+                            e('button', { onClick: () => setShowCloseModal(true), style: { background: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)", color: "#A855F7", padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "🗓 Archive"),
                             e('button', { 
                                 onClick: () => setTab("settings"), 
                                 title: "Settings",
@@ -526,7 +567,7 @@
                     )
                 ),
                 
-                e('div', { className: "page-wrap", style: { maxWidth: 1140, margin: "0 auto", padding: "clamp(16px, 4vw, 32px) clamp(12px, 4vw, 24px) 80px" } },
+                e('div', { className: "page-wrap", style: { maxWidth: 1140, margin: "0 auto", padding: "clamp(12px, 3vw, 32px) clamp(10px, 3vw, 24px) 80px" } },
                     tab === "dashboard" && e(DashboardOverview, { totals, bills, dailyExpenses, budgets, fc }),
                     tab === "limits" && e(BudgetLimitsView, { budgets, setBudgets, fc }),
                     tab === "budget" && e(BudgetBillsView, { incomes, setIncomes, bills, setBills, fc }),
@@ -562,7 +603,7 @@ e('footer', {
                         { id: "dashboard", icon: "🏠", label: "Home" },
                         { id: "daily",     icon: "💸", label: "Expenses" },
                         { id: "budget",    icon: "🧾", label: "Bills" },
-                        { id: "goals",     icon: "🏦", label: "Vaults" },
+                        { id: "goals",     icon: "🏦", label: "Savings" },
                         { id: "more",      icon: "⋯",  label: "More" }
                     ].map(t => e('button', {
                         key: t.id,
@@ -617,7 +658,7 @@ e('footer', {
                         e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 } },
                             e('div', null,
                                 e('div', { style: { fontSize: 24, marginBottom: 6 } }, "🗓"),
-                                e('h3', { style: { fontSize: 18, fontWeight: 800, color: "var(--text-main)" } }, "Close This Month"),
+                                e('h3', { style: { fontSize: 18, fontWeight: 800, color: "var(--text-main)" } }, "Archive & Start New Month"),
                                 e('div', { style: { fontSize: 13, color: "var(--text-muted)", marginTop: 4 } },
                                     new Date().toLocaleDateString("en-PH", { month: "long", year: "numeric" })
                                 )
@@ -759,7 +800,7 @@ e('footer', {
                 e('div', { className: "dashboard-grid" },
                     e('div', { style: { display: "flex", flexDirection: "column", gap: 24 } },
                         e('div', { className: "balance-gradient-card" },
-                            e(SLabel, { style: { color: "var(--text-light)", marginBottom: 6 } }, "Money left to spend"),
+                            e(SLabel, { style: { color: "var(--text-light)", marginBottom: 6 } }, "Available This Month"),
                             e('div', { style: { fontSize: 38, fontWeight: 800, color: "#00E676" } }, fc(totals.netAvailable)),
                             (() => {
                                 const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
@@ -773,7 +814,7 @@ e('footer', {
                                     ),
                                     safeDailySpend > 0 && e('div', { className: "safe-chip" },
                                         e('span', null, "💡"),
-                                        e('span', null, `Safe daily spend: ${fc(safeDailySpend * 100)} / day (${daysLeft}d left)`)
+                                        e('span', null, `Safe daily spend: ${fc(safeDailySpend)} / day (${daysLeft}d left)`)
                                     )
                                 );
                             })()
@@ -1018,7 +1059,17 @@ e('footer', {
             const [openMenu, setOpenMenu] = useState(null); const [editVault, setEditVault] = useState(null); const [editVaultForm, setEditVaultForm] = useState({ emoji: "💰", name: "", goal: "", start: "0" });
 
             const handleCreateVault = () => { if (!form.name || !form.goal) return; setFunds([...funds, { id: uid(), emoji: form.emoji, name: form.name.trim(), goalCents: tc(form.goal), startCents: tc(form.start || "0") }]); setForm({ emoji: "💰", name: "", goal: "", start: "0" }); setModal(false); };
-            const handleLogVaultTxn = () => { if (!actionAmt || !actionModal) return; setTxns([{ id: uid(), fundId: actionModal.fund.id, type: actionModal.type, amountCents: tc(actionAmt), date: todayStr() }, ...txns]); setActionAmt(""); setActionModal(null); };
+            const handleLogVaultTxn = () => {
+                if (!actionAmt || !actionModal) return;
+                const amtCents = tc(actionAmt);
+                if (actionModal.type === "withdrawal" && amtCents > actionModal.fund.bal) {
+                    alert(`Insufficient balance. Available: ${actionModal.fund.bal / 100}`);
+                    return;
+                }
+                setTxns([{ id: uid(), fundId: actionModal.fund.id, type: actionModal.type, amountCents: amtCents, date: todayStr() }, ...txns]);
+                setActionAmt("");
+                setActionModal(null);
+            };
             const openEditVault = (fund) => { setEditVault(fund); setEditVaultForm({ emoji: fund.emoji, name: fund.name, goal: String((fund.goalCents / 100).toFixed(2)), start: String(((fund.startCents || 0) / 100).toFixed(2)) }); };
             const saveEditVault = () => { if (!editVaultForm.name || !editVaultForm.goal) return; setFunds(funds.map(f => f.id === editVault.id ? { ...f, emoji: editVaultForm.emoji, name: editVaultForm.name.trim(), goalCents: tc(editVaultForm.goal), startCents: tc(editVaultForm.start || "0") } : f )); setEditVault(null); };
             const deleteVault = (id) => { if (window.confirm("Delete this vault? All linked transactions will also be removed.")) { setFunds(funds.filter(f => f.id !== id)); setTxns(txns.filter(t => t.fundId !== id)); } };
@@ -1110,7 +1161,7 @@ e('footer', {
 
         const container = document.getElementById('root');
         const root = ReactDOM.createRoot(container);
-        root.render(e(App));
+        root.render(e(ErrorBoundary, null, e(App)));
     </script>
 </body>
 </html>
