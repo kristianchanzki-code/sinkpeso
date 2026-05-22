@@ -425,6 +425,8 @@
             }
         }
 
+        const safeGet = (key, fallback = []) => { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } };
+
         // ── CORE APPLICATION ──────────────────────────────────────────────────
         function App() {
             const [tab, setTab] = useState("dashboard");
@@ -436,13 +438,13 @@
             });
             const [isUnlocked, setIsUnlocked] = useState(!settings.pin);
 
-            const [funds, setFunds] = useState(() => JSON.parse(localStorage.getItem("sp_funds") || "[]"));
-            const [txns, setTxns] = useState(() => JSON.parse(localStorage.getItem("sp_txns") || "[]"));
-            const [incomes, setIncomes] = useState(() => JSON.parse(localStorage.getItem("sp_incomes") || "[]"));
-            const [bills, setBills] = useState(() => JSON.parse(localStorage.getItem("sp_bills") || "[]"));
-            const [dailyExpenses, setDailyExpenses] = useState(() => JSON.parse(localStorage.getItem("sp_daily") || "[]"));
-            const [archives, setArchives] = useState(() => JSON.parse(localStorage.getItem("sp_archives") || "[]"));
-            const [budgets, setBudgets] = useState(() => JSON.parse(localStorage.getItem("sp_budgets") || "[]"));
+            const [funds, setFunds] = useState(() => safeGet("sp_funds"));
+            const [txns, setTxns] = useState(() => safeGet("sp_txns"));
+            const [incomes, setIncomes] = useState(() => safeGet("sp_incomes"));
+            const [bills, setBills] = useState(() => safeGet("sp_bills"));
+            const [dailyExpenses, setDailyExpenses] = useState(() => safeGet("sp_daily"));
+            const [archives, setArchives] = useState(() => safeGet("sp_archives"));
+            const [budgets, setBudgets] = useState(() => safeGet("sp_budgets"));
 
             // Sync states to LocalStorage & Apply Theme
             useEffect(() => {
@@ -541,9 +543,9 @@
                 // FIX #2: advance dueDate for recurring bills, then reset isPaid
                 setBills(prev => prev.map(b => {
                     let nextDue = b.dueDate;
-                    if (b.recurrence === "monthly" && b.dueDate) {
+                    if (b.recurring === "monthly" && b.dueDate) {
                         nextDue = addMonths(b.dueDate, 1);
-                    } else if (b.recurrence === "weekly" && b.dueDate) {
+                    } else if (b.recurring === "weekly" && b.dueDate) {
                         const d = new Date(b.dueDate + "T00:00:00");
                         d.setDate(d.getDate() + 7);
                         nextDue = d.toISOString().slice(0, 10);
@@ -1101,8 +1103,9 @@ e('footer', {
             const handleLogVaultTxn = () => {
                 if (!actionAmt || !actionModal) return;
                 const amtCents = tc(actionAmt);
+                if (amtCents <= 0) return;
                 if (actionModal.type === "withdrawal" && amtCents > actionModal.fund.bal) {
-                    alert(`Insufficient balance. Available: ${actionModal.fund.bal / 100}`);
+                    alert(`Insufficient balance. Available: ${fc(actionModal.fund.bal)}`);
                     return;
                 }
                 setTxns([{ id: uid(), fundId: actionModal.fund.id, type: actionModal.type, amountCents: amtCents, date: todayStr() }, ...txns]);
