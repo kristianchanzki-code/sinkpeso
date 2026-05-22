@@ -314,7 +314,7 @@
             );
         }
         function Field({ label, children }) { return e('div', { style: { marginBottom: 20 } }, e('div', { style: { fontSize: 12, fontWeight: 600, color: "var(--text-light)", marginBottom: 8, letterSpacing: "0.03em" } }, label), children); }
-        function Inp(p) { return e('input', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
+        function Inp(p) { const numericProps = p.type === "number" ? { inputMode: "decimal", pattern: "[0-9]*" } : {}; return e('input', { ...numericProps, ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", transition: "border 0.2s", minHeight: 48, ...(p.style || {}) } }); }
         function Sel({ children, ...p }) { return e('select', { ...p, style: { background: "var(--bg-input)", color: "var(--text-main)", border: "1px solid var(--border-input)", borderRadius: 12, padding: "14px 16px", fontSize: 15, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 48, ...(p.style || {}) } }, children); }
         function Btn({ children, v = "primary", style = {}, ...p }) {
             const vs = {
@@ -354,7 +354,7 @@
                         e('div', { style: { fontSize: 16, fontWeight: 800, color: "var(--text-main)" } }, "Quick Add Expense"),
                         e('button', { onClick: onClose, style: { background: "var(--hover-bg)", border: "none", color: "var(--text-light)", width: 32, height: 32, borderRadius: 8, cursor: "pointer", fontSize: 16 } }, "✕")
                     ),
-                    e('input', { className: "quick-add-amount", type: "number", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
+                    e('input', { className: "quick-add-amount", type: "number", inputMode: "decimal", pattern: "[0-9]*", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
                     e('div', { className: "cat-grid" },
                         CATEGORIES.map(c => e('button', { key: c, className: "cat-btn" + (category === c ? " selected" : ""), onClick: () => setCategory(c) },
                             e('div', { style: { fontSize: 18, marginBottom: 3 } }, catIcons[c] || "💰"),
@@ -388,7 +388,7 @@
                 e('h1', { style: { marginBottom: 6, color: "#00E676", fontSize: 28, fontWeight: 900, letterSpacing: "0.06em" } }, "SINKPESO"),
                 e('p', { style: { color: "var(--text-muted)", marginBottom: 32, fontSize: 13, letterSpacing: "0.01em" } }, "Private. Offline. Yours."),
                 e('input', { 
-                    type: "password", className: "pin-input", value: input, autoFocus: true,
+                    type: "password", inputMode: "numeric", pattern: "[0-9]*", className: "pin-input", value: input, autoFocus: true,
                     onChange: e => setInput(e.target.value.replace(/[^0-9]/g, '')),
                     onKeyDown: e => e.key === 'Enter' && handleAttempt(),
                     style: { borderColor: error ? "#EF4444" : "var(--border-input)", animation: error ? "shake 0.4s" : "none" }
@@ -608,7 +608,7 @@
                     tab === "goals" && e(SinkingFundsView, { funds, setFunds, enrichedFunds: totals.enrichedFunds, txns, setTxns, fc }),
                     tab === "transactions" && e(TransactionsView, { txns, setTxns, funds, fc }),
                     tab === "history" && e(HistoryView, { archives, fc }),
-                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }),
+                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }),
 
 e('footer', { 
                     style: { 
@@ -744,7 +744,7 @@ e('footer', {
         }
 
         // ── NEW MODULE: SETTINGS (Data Backup & Preferences) ─────────────────
-        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets }) {
+        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }) {
             const [pinInput, setPinInput] = useState(settings.pin);
 
             const handleExport = () => {
@@ -791,8 +791,8 @@ e('footer', {
                             Object.keys(CURRENCIES).map(c => e('option', { key: c, value: c }, c))
                         )),
                         e('div', { style: { borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 16 } },
-                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
-                            e(Btn, { v: "accent", onClick: () => setSettings({...settings, pin: pinInput}) }, "Save PIN")
+                            e(Field, { label: "App PIN Lock (Numeric)" }, e(Inp, { type: "password", inputMode: "numeric", pattern: "[0-9]*", placeholder: "Leave blank to disable", value: pinInput, onChange: e => setPinInput(e.target.value.replace(/[^0-9]/g, '')) })),
+                            e(Btn, { v: "accent", onClick: () => { setSettings({...settings, pin: pinInput}); showToast("✓ PIN successfully set!"); } }, "Save PIN")
                         )
                     ),
                     e('div', { className: "premium-panel" },
