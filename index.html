@@ -287,26 +287,60 @@
         // ── LUCIDE SVG ICON PRIMITIVE ─────────────────────────────────────────
         // Inline SVG so zero network requests, zero dependencies
         const ICONS = {
-            home:     "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
-            wallet:   "M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5 M16 12h.01",
-            receipt:  "M4 2h16v20l-8-4-8 4z",
-            landmark: "M3 22h18 M6 18V11 M10 18V11 M14 18V11 M18 18V11 M12 2L2 7h20z",
-            settings: "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
-            lock:     "M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z M7 11V7a5 5 0 0110 0v4",
-            plus:     "M12 5v14 M5 12h14",
-            archive:  "M21 8v13H3V8 M1 3h22v5H1z M10 12h4",
-            grid:     "M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z",
-            list:     "M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01",
-            history:  "M12 8v4l3 3 M3.05 11a9 9 0 109.9-8.95",
-            more:     "M5 12h.01 M12 12h.01 M19 12h.01",
+            home:        "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
+            wallet:      "M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5 M16 12h.01",
+            receipt:     "M4 2h16v20l-8-4-8 4z",
+            landmark:    "M3 22h18 M6 18V11 M10 18V11 M14 18V11 M18 18V11 M12 2L2 7h20z",
+            settings:    "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
+            lock:        "M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z M7 11V7a5 5 0 0110 0v4",
+            plus:        "M12 5v14 M5 12h14",
+            archive:     "M21 8v13H3V8 M1 3h22v5H1z M10 12h4",
+            grid:        "M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z",
+            list:        "M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01",
+            history:     "M12 8v4l3 3 M3.05 11a9 9 0 109.9-8.95",
+            more:        "M5 12h.01 M12 12h.01 M19 12h.01",
+            x:           "M18 6L6 18 M6 6l12 12",
+            shield:      "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+            plane:       "M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
+            briefcase:   "M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2",
+            smartphone:  "M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2z M12 18h.01",
+            utensils:    "M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2 M7 2v20 M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7",
+            shoppingbag: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z M3 6h18 M16 10a4 4 0 01-8 0",
+            target:      "M12 22a10 10 0 100-20 10 10 0 000 20z M12 18a6 6 0 100-12 6 6 0 000 12z M12 14a2 2 0 100-4 2 2 0 000 4z",
+            trendingup:  "M23 6l-9.5 9.5-5-5L1 18 M17 6h6v6",
+            edit:        "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7 M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z",
+            trash:       "M3 6h18 M8 6V4h8v2 M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6",
+            clipboardlist:"M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2 M9 14l2 2 4-4 M8 2h8v4H8z",
+            inbox:       "M22 12h-6l-2 3h-4l-2-3H2 M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z",
+            arrowupdown: "M7 16V4m0 0L3 8m4-4l4 4 M17 8v12m0 0l4-4m-4 4l-4-4",
+            car:         "M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-3 M8.5 17a1.5 1.5 0 100 3 1.5 1.5 0 000-3z M18.5 17a1.5 1.5 0 100 3 1.5 1.5 0 000-3z",
+            home2:       "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
+            gift:        "M20 12v10H4V12 M2 7h20v5H2z M12 22V7 M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z",
         };
         function Icon({ name, size = 18, color = "currentColor", style: st = {} }) {
+            const path = ICONS[name] || ICONS.target;
             return e('svg', { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: color, strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", style: { flexShrink: 0, ...st } },
-                ...ICONS[name].split(" M").map((seg, i) => e('path', { key: i, d: (i === 0 ? "" : "M") + seg }))
+                ...path.split(" M").map((seg, i) => e('path', { key: i, d: (i === 0 ? "" : "M") + seg }))
             );
         }
 
-        const FUND_E = ["💰", "💼", "📈", "🔌", "🏠", "🛡️", "☕", "🛒", "📱", "🚗", "🎁", "✈️"];
+        // Vault icon system — Lucide only, no emoji
+        const FUND_ICONS = [
+            { id: "landmark",    label: "Savings" },
+            { id: "shield",      label: "Emergency" },
+            { id: "plane",       label: "Travel" },
+            { id: "briefcase",   label: "Business" },
+            { id: "smartphone",  label: "Gadget" },
+            { id: "utensils",    label: "Food" },
+            { id: "receipt",     label: "Bills" },
+            { id: "shoppingbag", label: "Shopping" },
+            { id: "car",         label: "Vehicle" },
+            { id: "home2",       label: "Housing" },
+            { id: "gift",        label: "Gift" },
+            { id: "trendingup",  label: "Investment" },
+        ];
+        // Fallback: if a saved fund still has an emoji, map to landmark
+        const resolveVaultIcon = (iconId) => FUND_ICONS.find(x => x.id === iconId) ? iconId : "landmark";
         const CATEGORIES = ["Food", "Gas", "Bills", "Business", "Personal", "Savings"];
         const CURRENCIES = {
             "PHP": { style: "currency", currency: "PHP" },
@@ -367,8 +401,10 @@
                 isOpen && e('div', { style: { position: "fixed", inset: 0, zIndex: 299 }, onClick: (ev) => { ev.stopPropagation(); setOpenMenu(null); } }),
                 e('button', { className: "dot-menu-btn", onClick: (ev) => { ev.stopPropagation(); setOpenMenu(isOpen ? null : itemId); } }, '⋮'),
                 isOpen && e('div', { className: "dot-menu-dropdown" },
-                    e('button', { className: "dot-menu-item", onClick: (ev) => { ev.stopPropagation(); setOpenMenu(null); onEdit(); } }, "✏️ Edit"),
-                    e('button', { className: "dot-menu-item", style: { color: "#EF4444" }, onClick: (ev) => { ev.stopPropagation(); setOpenMenu(null); onDelete(); } }, "🗑️ Delete")
+                    e('button', { className: "dot-menu-item", onClick: (ev) => { ev.stopPropagation(); setOpenMenu(null); onEdit(); } },
+                        e('span', { style: { display:"flex", alignItems:"center", gap:8 } }, e(Icon, { name:"edit", size:14 }), "Edit")),
+                    e('button', { className: "dot-menu-item", style: { color: "#EF4444" }, onClick: (ev) => { ev.stopPropagation(); setOpenMenu(null); onDelete(); } },
+                        e('span', { style: { display:"flex", alignItems:"center", gap:8 } }, e(Icon, { name:"trash", size:14, color:"#EF4444" }), "Delete"))
                 )
             );
         }
@@ -378,7 +414,7 @@
             const [amount, setAmount] = useState("");
             const [category, setCategory] = useState("Food");
             const [note, setNote] = useState("");
-            const catIcons = { Food: "🍜", Gas: "⛽", Bills: "🧾", Business: "💼", Personal: "🛍️", Savings: "🏦" };
+            const catIcons = { Food: "utensils", Gas: "car", Bills: "receipt", Business: "briefcase", Personal: "shoppingbag", Savings: "landmark" };
             const handle = () => {
                 if (!amount || Number(amount) <= 0) return;
                 onSave({ id: uid(), name: note.trim() || category, amountCents: tc(amount), category, date: todayStr() });
@@ -392,7 +428,7 @@
                     e('input', { className: "quick-add-amount", type: "number", inputMode: "decimal", pattern: "[0-9]*", placeholder: "0.00", autoFocus: true, value: amount, onChange: ev => setAmount(ev.target.value), onKeyDown: ev => ev.key === 'Enter' && handle() }),
                     e('div', { className: "cat-grid" },
                         CATEGORIES.map(c => e('button', { key: c, className: "cat-btn" + (category === c ? " selected" : ""), onClick: () => setCategory(c) },
-                            e('div', { style: { fontSize: 18, marginBottom: 3 } }, catIcons[c] || "💰"),
+                            e('div', { style: { marginBottom: 3, opacity: 0.8 } }, e(Icon, { name: catIcons[c] || "target", size: 18 })),
                             c
                         ))
                     ),
@@ -462,7 +498,10 @@
 
             const defaultSettings = { currency: 'PHP', theme: 'dark', pin: '' };
             const [settings, setSettings] = useState(() => {
-                try { return JSON.parse(localStorage.getItem("sp_settings")) || defaultSettings; }
+                try { 
+                    const saved = JSON.parse(localStorage.getItem("sp_settings"));
+                    return saved && typeof saved === 'object' ? { ...defaultSettings, ...saved } : defaultSettings;
+                }
                 catch { return defaultSettings; }
             });
             const [isUnlocked, setIsUnlocked] = useState(!settings.pin);
@@ -645,7 +684,7 @@
                     tab === "goals" && e(SinkingFundsView, { funds, setFunds, enrichedFunds: totals.enrichedFunds, txns, setTxns, fc }),
                     tab === "transactions" && e(TransactionsView, { txns, setTxns, funds, fc }),
                     tab === "history" && e(HistoryView, { archives, fc }),
-                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }),
+                    tab === "settings" && e(SettingsView, { settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast, totals, bills, budgets, fc }),
 
 e('footer', { 
                     style: { 
@@ -781,8 +820,10 @@ e('footer', {
         }
 
         // ── NEW MODULE: SETTINGS (Data Backup & Preferences) ─────────────────
-        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast }) {
-            const [pinInput, setPinInput] = useState(settings.pin);
+        function SettingsView({ settings, setSettings, setIncomes, setBills, setDailyExpenses, setFunds, setTxns, setArchives, setBudgets, showToast, totals, bills, budgets, fc }) {
+            console.log("settings render"); console.log("settings", settings); console.log("settings type", typeof settings);
+            const safeSettings = settings || {};
+            const [pinInput, setPinInput] = useState(safeSettings?.pin || '');
 
             const handleExport = () => {
                 const data = {
@@ -823,10 +864,10 @@ e('footer', {
                 e('div', { className: "dashboard-grid" },
                     e('div', { className: "premium-panel" },
                         e(SLabel, { style: { marginBottom: 16 } }, "Preferences"),
-                        e(Field, { label: "Theme Mode" }, e(Sel, { value: settings.theme, onChange: e => setSettings({...settings, theme: e.target.value}) },
+                        e(Field, { label: "Theme Mode" }, e(Sel, { value: settings?.theme || 'dark', onChange: e => setSettings({...settings, theme: e.target.value}) },
                             e('option', { value: "dark" }, "🌙 Dark Mode"), e('option', { value: "light" }, "☀️ Light Mode")
                         )),
-                        e(Field, { label: "Display Currency" }, e(Sel, { value: settings.currency, onChange: e => setSettings({...settings, currency: e.target.value}) },
+                        e(Field, { label: "Display Currency" }, e(Sel, { value: settings?.currency || 'PHP', onChange: e => setSettings({...settings, currency: e.target.value}) },
                             Object.keys(CURRENCIES).map(c => e('option', { key: c, value: c }, c))
                         )),
                         e('div', { style: { borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 16 } },
@@ -850,24 +891,25 @@ e('footer', {
 
         // ── INSIGHT STRIP ─────────────────────────────────────────────────────
         function InsightStrip({ totals, bills, budgets, fc }) {
+            if (!totals || !bills || !budgets || !fc) return null;
             const chips = [];
             const daysLeft = Math.max(1, new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate() - new Date().getDate());
-            const safe = totals.netAvailable > 0 ? Math.floor(totals.netAvailable / daysLeft) : 0;
-            if (safe > 0) chips.push({ icon:"💡", text:`Safe to spend ${fc(safe)}/day`, c:"#00E676", bg:"rgba(0,230,118,0.08)", border:"rgba(0,230,118,0.2)" });
+            const safe = (totals?.netAvailable || 0) > 0 ? Math.floor(totals.netAvailable / daysLeft) : 0;
+            if (safe > 0) chips.push({ icon:"trendingup", text:`Safe to spend ${fc(safe)}/day`, c:"#00E676", bg:"rgba(0,230,118,0.08)", border:"rgba(0,230,118,0.2)" });
             const overdue = bills.filter(b => !b.isPaid && getDaysRemaining(b.dueDate) < 0).length;
-            if (overdue > 0) chips.push({ icon:"⚠️", text:`${overdue} bill${overdue>1?"s":""} overdue`, c:"#EF4444", bg:"rgba(239,68,68,0.08)", border:"rgba(239,68,68,0.2)" });
+            if (overdue > 0) chips.push({ icon:"arrowupdown", text:`${overdue} bill${overdue>1?"s":""} overdue`, c:"#EF4444", bg:"rgba(239,68,68,0.08)", border:"rgba(239,68,68,0.2)" });
             const dueSoon = bills.filter(b => !b.isPaid && getDaysRemaining(b.dueDate) >= 0 && getDaysRemaining(b.dueDate) <= 7).length;
-            if (dueSoon > 0) chips.push({ icon:"🧾", text:`${dueSoon} bill${dueSoon>1?"s":""} due this week`, c:"#F59E0B", bg:"rgba(245,158,11,0.08)", border:"rgba(245,158,11,0.2)" });
+            if (dueSoon > 0) chips.push({ icon:"receipt", text:`${dueSoon} bill${dueSoon>1?"s":""} due this week`, c:"#F59E0B", bg:"rgba(245,158,11,0.08)", border:"rgba(245,158,11,0.2)" });
             const warnCat = CATEGORIES.find(k => { const b=budgets.find(x=>x.category===k); return b && safeDiv(totals.catSum[k]||0, b.limitCents) >= 0.8 && safeDiv(totals.catSum[k]||0, b.limitCents) < 1; });
-            if (warnCat) chips.push({ icon:"📊", text:`${warnCat} budget almost full`, c:"#FFD600", bg:"rgba(255,214,0,0.08)", border:"rgba(255,214,0,0.2)" });
+            if (warnCat) chips.push({ icon:"target", text:`${warnCat} budget almost full`, c:"#FFD600", bg:"rgba(255,214,0,0.08)", border:"rgba(255,214,0,0.2)" });
             const overCat = CATEGORIES.find(k => { const b=budgets.find(x=>x.category===k); return b && safeDiv(totals.catSum[k]||0, b.limitCents) >= 1; });
-            if (overCat) chips.push({ icon:"🔴", text:`${overCat} budget exceeded`, c:"#EF4444", bg:"rgba(239,68,68,0.08)", border:"rgba(239,68,68,0.2)" });
+            if (overCat) chips.push({ icon:"target", text:`${overCat} budget exceeded`, c:"#EF4444", bg:"rgba(239,68,68,0.08)", border:"rgba(239,68,68,0.2)" });
             if (!overdue && !dueSoon && bills.filter(b=>!b.isPaid).length === 0 && bills.length > 0)
-                chips.push({ icon:"✅", text:"All bills cleared", c:"#00E676", bg:"rgba(0,230,118,0.08)", border:"rgba(0,230,118,0.2)" });
+                chips.push({ icon:"shield", text:"All bills cleared", c:"#00E676", bg:"rgba(0,230,118,0.08)", border:"rgba(0,230,118,0.2)" });
             if (!chips.length) return null;
             return e('div', { style:{ display:"flex", gap:8, overflowX:"auto", paddingBottom:4, marginBottom:20, scrollbarWidth:"none", msOverflowStyle:"none", WebkitOverflowScrolling:"touch" } },
                 chips.map((ch,i) => e('div', { key:i, style:{ display:"flex", alignItems:"center", gap:6, background:ch.bg, border:`1px solid ${ch.border}`, color:ch.c, padding:"7px 13px", borderRadius:20, fontSize:12, fontWeight:700, whiteSpace:"nowrap", flexShrink:0 } },
-                    e('span', null, ch.icon), e('span', null, ch.text)
+                    e(Icon, { name:ch.icon, size:12, color:ch.c }), e('span', null, ch.text)
                 ))
             );
         }
@@ -901,7 +943,7 @@ e('footer', {
                                         e('div', null, e(SLabel, { style: { marginBottom: 4 } }, "Total Spent"), e('div', { style: { fontSize: 16, fontWeight: 700, color: "var(--text-muted)" } }, fc(totals.totalDailySpent + totals.paidBills)))
                                     ),
                                     safeDailySpend > 0 && e('div', { className: "safe-chip" },
-                                        e('span', null, "💡"),
+                                        e(Icon, { name: "trendingup", size: 13, color: "#00E676" }),
                                         e('span', null, `Safe daily spend: ${fc(safeDailySpend)} / day (${daysLeft}d left)`)
                                     )
                                 );
@@ -1009,7 +1051,7 @@ e('footer', {
                     )
                 ),
                 e('div', { className: "premium-panel" },
-                    budgets.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "🎯"), e("div", { className: "empty-state-title" }, "No limits set"), e("div", { className: "empty-state-sub" }, "Set monthly caps to keep spending in check."))) :
+                    budgets.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "target", size: 28, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No limits set"), e("div", { className: "empty-state-sub" }, "Set monthly caps to keep spending in check."))) :
                     budgets.map(b => e('div', { key: b.id, className: "stream-row" },
                         e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, b.category), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2 } }, "Monthly Limit")),
                         e('div', { style: S.row10 },
@@ -1055,7 +1097,7 @@ e('footer', {
                             e(Btn, { v: "primary", onClick: () => { if(!incName || !incAmt) return; setIncomes([...incomes, { id: uid(), name: incName, amountCents: tc(incAmt), date: todayStr() }]); setIncName(""); setIncAmt(""); } }, "Add")
                         ),
                         e(SLabel, { style: { marginBottom: 12 } }, "Income History List"),
-                        incomes.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "10px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "📥"), e("div", { className: "empty-state-title" }, "No income added"), e("div", { className: "empty-state-sub" }, "Add a salary, freelance, or any cash in."))) :
+                        incomes.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "10px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "inbox", size: 28, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No income added"), e("div", { className: "empty-state-sub" }, "Add a salary, freelance, or any cash in."))) :
                         incomes.map(i => e('div', { key: i.id, className: "stream-row" },
                             e('div', null, e('div', { style: { fontWeight: 600 } }, i.name), e('div', { style: { fontSize: 11, color: "var(--text-muted)" } }, i.date)),
                             e('div', { style: S.row10 }, e('div', { style: { color: "#00E676", fontWeight: 700 } }, `+${fc(i.amountCents)}`), e(DotMenu, { itemId: i.id, openMenu: openMenuInc, setOpenMenu: setOpenMenuInc, onEdit: () => openEditIncome(i), onDelete: () => deleteIncome(i.id) }))
@@ -1071,13 +1113,13 @@ e('footer', {
                                 e(Inp, { type: "date", value: billDate, onChange: ev => setBillDate(ev.target.value) })
                             ),
                             e('div', { style: { display: "flex", gap: 12 } },
-                                e(Sel, { value: billRecurring, style: {flex: 1}, onChange: ev => setBillRecurring(ev.target.value) }, e('option', { value: "none" }, "🔂 One-Time"), e('option', { value: "monthly" }, "🔄 Monthly"), e('option', { value: "weekly" }, "📅 Weekly")),
+                                e(Sel, { value: billRecurring, style: {flex: 1}, onChange: ev => setBillRecurring(ev.target.value) }, e('option', { value: "none" }, "One-Time"), e('option', { value: "monthly" }, "Monthly"), e('option', { value: "weekly" }, "Weekly")),
                                 e(Sel, { value: billCat, style: {flex: 1}, onChange: ev => setBillCat(ev.target.value) }, CATEGORIES.map(c => e('option', {key: c, value: c}, c)))
                             ),
                             e(Btn, { v: "accent", onClick: () => { if(!billName || !billAmt || !billDate) return; setBills([...bills, { id: uid(), name: billName, amountCents: tc(billAmt), dueDate: billDate, isPaid: false, recurring: billRecurring, category: billCat }]); setBillName(""); setBillAmt(""); setBillDate(""); setBillRecurring("none"); } }, "Save Bill Item")
                         ),
                         e(SLabel, { style: { marginBottom: 12 } }, "Bill List Check"),
-                        bills.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "10px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "🧾"), e("div", { className: "empty-state-title" }, "No bills yet"), e("div", { className: "empty-state-sub" }, "Track rent, utilities, subscriptions."))) :
+                        bills.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "10px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "receipt", size: 28, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No bills yet"), e("div", { className: "empty-state-sub" }, "Track rent, utilities, subscriptions."))) :
                         bills.map(b => {
                             const isRecurring = b.recurring && b.recurring !== "none";
                             const days = getDaysRemaining(b.dueDate);
@@ -1089,7 +1131,7 @@ e('footer', {
                                 e('div', null,
                                     e('div', { style: S.row8 },
                                         e('div', { style: { fontWeight: 600, textDecoration: b.isPaid ? "line-through" : "none", color: b.isPaid ? "var(--text-muted)" : "var(--text-main)" } }, b.name),
-                                        isRecurring && e('span', { style: { fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 5, background: "rgba(99,102,241,0.15)", color: "#818CF8" } }, b.recurring === "weekly" ? "📅 W" : "🔄 M")
+                                        isRecurring && e('span', { style: { fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 5, background: "rgba(99,102,241,0.15)", color: "#818CF8" } }, b.recurring === "weekly" ? "Weekly" : "Monthly")
                                     ),
                                     e('div', { style: { fontSize: 11, color: uColor, fontWeight: days <= 3 && !b.isPaid ? 700 : 500 } }, `Due: ${b.dueDate} • ${b.category || "Bills"}`)
                                 ),
@@ -1104,7 +1146,7 @@ e('footer', {
                 ),
                 // Edit Modals
                 editIncome && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Income"), e(Field, { label: "Source" }, e(Inp, { value: editIncForm.name, onChange: ev => setEditIncForm({ ...editIncForm, name: ev.target.value }) })), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editIncForm.amount, onChange: ev => setEditIncForm({ ...editIncForm, amount: ev.target.value }) })), e('div', { style: { display: "flex", gap: 12 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditIncome(null) }, "Cancel"), e(Btn, { v: "primary", style: { flex: 1 }, onClick: saveEditIncome }, "Save")))),
-                editBill && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Bill"), e(Field, { label: "Bill Label" }, e(Inp, { value: editBillForm.name, onChange: ev => setEditBillForm({ ...editBillForm, name: ev.target.value }) })), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editBillForm.amount, onChange: ev => setEditBillForm({ ...editBillForm, amount: ev.target.value }) })), e(Field, { label: "Due Date" }, e(Inp, { type: "date", value: editBillForm.dueDate, onChange: ev => setEditBillForm({ ...editBillForm, dueDate: ev.target.value }) })), e(Field, { label: "Category" }, e(Sel, { value: editBillForm.category, onChange: ev => setEditBillForm({ ...editBillForm, category: ev.target.value }) }, CATEGORIES.map(c => e('option', {key: c, value: c}, c)))), e(Field, { label: "Recurring" }, e(Sel, { value: editBillForm.recurring, onChange: ev => setEditBillForm({ ...editBillForm, recurring: ev.target.value }) }, e('option', { value: "none" }, "🔂 One-Time"), e('option', { value: "monthly" }, "🔄 Monthly"), e('option', { value: "weekly" }, "📅 Weekly"))), e('div', { style: { display: "flex", gap: 12 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditBill(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditBill }, "Save"))))
+                editBill && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Bill"), e(Field, { label: "Bill Label" }, e(Inp, { value: editBillForm.name, onChange: ev => setEditBillForm({ ...editBillForm, name: ev.target.value }) })), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editBillForm.amount, onChange: ev => setEditBillForm({ ...editBillForm, amount: ev.target.value }) })), e(Field, { label: "Due Date" }, e(Inp, { type: "date", value: editBillForm.dueDate, onChange: ev => setEditBillForm({ ...editBillForm, dueDate: ev.target.value }) })), e(Field, { label: "Category" }, e(Sel, { value: editBillForm.category, onChange: ev => setEditBillForm({ ...editBillForm, category: ev.target.value }) }, CATEGORIES.map(c => e('option', {key: c, value: c}, c)))), e(Field, { label: "Recurring" }, e(Sel, { value: editBillForm.recurring, onChange: ev => setEditBillForm({ ...editBillForm, recurring: ev.target.value }) }, e('option', { value: "none" }, "One-Time"), e('option', { value: "monthly" }, "Monthly"), e('option', { value: "weekly" }, "Weekly"))), e('div', { style: { display: "flex", gap: 12 } }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditBill(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditBill }, "Save"))))
             );
         }
 
@@ -1130,7 +1172,7 @@ e('footer', {
                 ),
                 e('div', { className: "premium-panel" },
                     e(SLabel, { style: { marginBottom: 12 } }, "Spending Log Timeline"),
-                    dailyExpenses.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "💸"), e("div", { className: "empty-state-title" }, "No expenses yet"), e("div", { className: "empty-state-sub" }, "Tap + to log your first expense."))) :
+                    dailyExpenses.length === 0 ? e('div', { style: { color: "var(--text-muted)", fontSize: 13, padding: "14px 0" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "wallet", size: 28, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No expenses yet"), e("div", { className: "empty-state-sub" }, "Tap + to log your first expense."))) :
                     dailyExpenses.map(exp => e('div', { key: exp.id, className: "stream-row" },
                         e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, exp.name), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2 } }, `${exp.date} • ${exp.category}`)),
                         e('div', { style: S.row10 }, e('div', { style: { fontWeight: 700, color: "#EF4444" } }, `-${fc(exp.amountCents)}`), e(DotMenu, { itemId: exp.id, openMenu, setOpenMenu, onEdit: () => openEditExp(exp), onDelete: () => deleteExp(exp.id) }))
@@ -1142,11 +1184,11 @@ e('footer', {
 
         // ── MODULE: SAVINGS VAULTS ──────────────────────────────────────────
         function SinkingFundsView({ funds, setFunds, enrichedFunds, txns, setTxns, fc }) {
-            const [modal, setModal] = useState(false); const [form, setForm] = useState({ emoji: "💰", name: "", goal: "", start: "0" });
+            const [modal, setModal] = useState(false); const [form, setForm] = useState({ iconId: "landmark", name: "", goal: "", start: "0" });
             const [actionModal, setActionModal] = useState(null); const [actionAmt, setActionAmt] = useState("");
-            const [openMenu, setOpenMenu] = useState(null); const [editVault, setEditVault] = useState(null); const [editVaultForm, setEditVaultForm] = useState({ emoji: "💰", name: "", goal: "", start: "0" });
+            const [openMenu, setOpenMenu] = useState(null); const [editVault, setEditVault] = useState(null); const [editVaultForm, setEditVaultForm] = useState({ iconId: "landmark", name: "", goal: "", start: "0" });
 
-            const handleCreateVault = () => { if (!form.name || !form.goal) return; setFunds([...funds, { id: uid(), emoji: form.emoji, name: form.name.trim(), goalCents: tc(form.goal), startCents: tc(form.start || "0") }]); setForm({ emoji: "💰", name: "", goal: "", start: "0" }); setModal(false); };
+            const handleCreateVault = () => { if (!form.name || !form.goal) return; setFunds([...funds, { id: uid(), iconId: form.iconId, name: form.name.trim(), goalCents: tc(form.goal), startCents: tc(form.start || "0") }]); setForm({ iconId: "landmark", name: "", goal: "", start: "0" }); setModal(false); };
             const handleLogVaultTxn = () => {
                 if (!actionAmt || !actionModal) return;
                 const amtCents = tc(actionAmt);
@@ -1159,17 +1201,17 @@ e('footer', {
                 setActionAmt("");
                 setActionModal(null);
             };
-            const openEditVault = (fund) => { setEditVault(fund); setEditVaultForm({ emoji: fund.emoji, name: fund.name, goal: String((fund.goalCents / 100).toFixed(2)), start: String(((fund.startCents || 0) / 100).toFixed(2)) }); };
-            const saveEditVault = () => { if (!editVaultForm.name || !editVaultForm.goal) return; setFunds(funds.map(f => f.id === editVault.id ? { ...f, emoji: editVaultForm.emoji, name: editVaultForm.name.trim(), goalCents: tc(editVaultForm.goal), startCents: tc(editVaultForm.start || "0") } : f )); setEditVault(null); };
+            const openEditVault = (fund) => { setEditVault(fund); setEditVaultForm({ iconId: resolveVaultIcon(fund.iconId || fund.emoji), name: fund.name, goal: String((fund.goalCents / 100).toFixed(2)), start: String(((fund.startCents || 0) / 100).toFixed(2)) }); };
+            const saveEditVault = () => { if (!editVaultForm.name || !editVaultForm.goal) return; setFunds(funds.map(f => f.id === editVault.id ? { ...f, iconId: editVaultForm.iconId, name: editVaultForm.name.trim(), goalCents: tc(editVaultForm.goal), startCents: tc(editVaultForm.start || "0") } : f )); setEditVault(null); };
             const deleteVault = (id) => { if (window.confirm("Delete this vault? All linked transactions will also be removed.")) { setFunds(funds.filter(f => f.id !== id)); setTxns(txns.filter(t => t.fundId !== id)); } };
 
             return e('div', null,
                 e('div', { style: S.pageHeader }, e('div', null, e('h2', { style: { fontSize: 22, fontWeight: 800 } }, 'Savings Vaults'), e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginTop: 4 } }, 'Isolate cash balances cleanly.')), e(Btn, { v: "accent", onClick: () => setModal(true) }, "+ Create New Vault")),
-                enrichedFunds.length === 0 ? e('div', { className: "premium-panel", style: { textAlign: "center", padding: "40px 0", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "🏦"), e("div", { className: "empty-state-title" }, "No Savings Vaults yet"), e("div", { className: "empty-state-sub" }, "Create a vault to isolate money for a specific goal."))) :
-                e('div', { className: "vaults-grid" }, enrichedFunds.map(f => e('div', { key: f.id, className: "premium-panel", style: { display: "flex", flexDirection: "column", justifyContent: "space-between" } }, e('div', null, e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 } }, e('span', { style: { fontSize: 28 } }, f.emoji), e('div', { style: S.row8 }, e('span', { style: { fontSize: 12, fontWeight: 700, color: f.pct >= 1 ? "#00E676" : "#2563EB", background: f.pct >= 1 ? "rgba(0,230,118,0.1)" : "rgba(37,99,235,0.1)", padding: "4px 10px", borderRadius: 8 } }, f.pct >= 1 ? "Fully Funded" : `${Math.round(f.pct * 100)}%`), e(DotMenu, { itemId: f.id, openMenu, setOpenMenu, onEdit: () => openEditVault(f), onDelete: () => deleteVault(f.id) }))), e('h3', { style: { fontSize: 18, fontWeight: 700, color: "var(--text-main)" } }, f.name), e('div', { style: { display: "flex", justifyContent: "space-between", margin: "14px 0 6px", fontSize: 14 } }, e('span', { style: { fontWeight: 700, color: "var(--text-main)" } }, fc(f.bal)), e('span', { style: { color: "var(--text-muted)" } }, `Target: ${fc(f.goalCents)}`)), e(PBar, { pct: f.pct, color: f.pct >= 1 ? "#00E676" : "#2563EB" })), e('div', { style: { display: "flex", gap: 10, marginTop: 20 } }, e(Btn, { v: "ghost", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'withdrawal', fund: f }) }, "Withdraw"), e(Btn, { v: "primary", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'deposit', fund: f }) }, "Deposit"))))),
+                enrichedFunds.length === 0 ? e('div', { className: "premium-panel", style: { textAlign: "center", padding: "40px 0", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "landmark", size: 32, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No Savings Vaults yet"), e("div", { className: "empty-state-sub" }, "Create a vault to isolate money for a specific goal."))) :
+                e('div', { className: "vaults-grid" }, enrichedFunds.map(f => e('div', { key: f.id, className: "premium-panel", style: { display: "flex", flexDirection: "column", justifyContent: "space-between" } }, e('div', null, e('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 } }, e('div', { style: { width: 40, height: 40, borderRadius: 12, background: "var(--hover-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" } }, e(Icon, { name: resolveVaultIcon(f.iconId || f.emoji), size: 20, color: "#2563EB" })), e('div', { style: S.row8 }, e('span', { style: { fontSize: 12, fontWeight: 700, color: f.pct >= 1 ? "#00E676" : "#2563EB", background: f.pct >= 1 ? "rgba(0,230,118,0.1)" : "rgba(37,99,235,0.1)", padding: "4px 10px", borderRadius: 8 } }, f.pct >= 1 ? "Fully Funded" : `${Math.round(f.pct * 100)}%`), e(DotMenu, { itemId: f.id, openMenu, setOpenMenu, onEdit: () => openEditVault(f), onDelete: () => deleteVault(f.id) }))), e('h3', { style: { fontSize: 18, fontWeight: 700, color: "var(--text-main)" } }, f.name), e('div', { style: { display: "flex", justifyContent: "space-between", margin: "14px 0 6px", fontSize: 14 } }, e('span', { style: { fontWeight: 700, color: "var(--text-main)" } }, fc(f.bal)), e('span', { style: { color: "var(--text-muted)" } }, `Target: ${fc(f.goalCents)}`)), e(PBar, { pct: f.pct, color: f.pct >= 1 ? "#00E676" : "#2563EB" })), e('div', { style: { display: "flex", gap: 10, marginTop: 20 } }, e(Btn, { v: "ghost", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'withdrawal', fund: f }) }, "Withdraw"), e(Btn, { v: "primary", style: { flex: 1, padding: "8px 12px", fontSize: 12 }, onClick: () => setActionModal({ type: 'deposit', fund: f }) }, "Deposit"))))),
                 
-                modal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Setup Target Vault"), e(Field, { label: "Pick Icon Graphic" }, e(Sel, { value: form.emoji, onChange: ev => setForm({ ...form, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: form.name, onChange: ev => setForm({ ...form, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: form.goal, onChange: ev => setForm({ ...form, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: form.start, onChange: ev => setForm({ ...form, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setModal(false) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: handleCreateVault }, "Initialize Vault")))),
-                editVault && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Vault"), e(Field, { label: "Pick Icon" }, e(Sel, { value: editVaultForm.emoji, onChange: ev => setEditVaultForm({ ...editVaultForm, emoji: ev.target.value }) }, FUND_E.map(emoji => e('option', { key: emoji, value: emoji }, emoji)))), e(Field, { label: "Vault Name" }, e(Inp, { value: editVaultForm.name, onChange: ev => setEditVaultForm({ ...editVaultForm, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: editVaultForm.goal, onChange: ev => setEditVaultForm({ ...editVaultForm, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: editVaultForm.start, onChange: ev => setEditVaultForm({ ...editVaultForm, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditVault(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditVault }, "Save Changes")))),
+                modal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Setup Target Vault"), e(Field, { label: "Vault Icon" }, e('div', { style: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 } }, FUND_ICONS.map(fi => e('button', { key: fi.id, title: fi.label, onClick: () => setForm({ ...form, iconId: fi.id }), style: { padding: "10px 0", border: `1px solid ${form.iconId === fi.id ? "#2563EB" : "var(--border)"}`, borderRadius: 10, background: form.iconId === fi.id ? "rgba(37,99,235,0.12)" : "var(--bg-input)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" } }, e(Icon, { name: fi.id, size: 16, color: form.iconId === fi.id ? "#2563EB" : "var(--text-muted)" }))))), e(Field, { label: "Vault Name" }, e(Inp, { value: form.name, onChange: ev => setForm({ ...form, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: form.goal, onChange: ev => setForm({ ...form, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: form.start, onChange: ev => setForm({ ...form, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setModal(false) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: handleCreateVault }, "Initialize Vault")))),
+                editVault && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 20 } }, "Edit Vault"), e(Field, { label: "Vault Icon" }, e('div', { style: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 } }, FUND_ICONS.map(fi => e('button', { key: fi.id, title: fi.label, onClick: () => setEditVaultForm({ ...editVaultForm, iconId: fi.id }), style: { padding: "10px 0", border: `1px solid ${editVaultForm.iconId === fi.id ? "#2563EB" : "var(--border)"}`, borderRadius: 10, background: editVaultForm.iconId === fi.id ? "rgba(37,99,235,0.12)" : "var(--bg-input)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" } }, e(Icon, { name: fi.id, size: 16, color: editVaultForm.iconId === fi.id ? "#2563EB" : "var(--text-muted)" }))))), e(Field, { label: "Vault Name" }, e(Inp, { value: editVaultForm.name, onChange: ev => setEditVaultForm({ ...editVaultForm, name: ev.target.value }) })), e(Field, { label: "Goal Amount" }, e(Inp, { type: "number", value: editVaultForm.goal, onChange: ev => setEditVaultForm({ ...editVaultForm, goal: ev.target.value }) })), e(Field, { label: "Starting Balance" }, e(Inp, { type: "number", value: editVaultForm.start, onChange: ev => setEditVaultForm({ ...editVaultForm, start: ev.target.value }) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditVault(null) }, "Cancel"), e(Btn, { v: "accent", style: { flex: 1 }, onClick: saveEditVault }, "Save Changes")))),
                 actionModal && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8, textTransform: "capitalize" } }, `${actionModal.type} — ${actionModal.fund.name}`), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Current balance held: ${fc(actionModal.fund.bal)}`), e(Field, { label: `Amount to ${actionModal.type}` }, e(Inp, { type: "number", value: actionAmt, autoFocus: true, onChange: ev => setActionAmt(ev.target.value) })), e('div', { style: S.modalFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setActionModal(null) }, "Back"), e(Btn, { v: actionModal.type === 'deposit' ? 'primary' : 'danger', style: { flex: 1 }, onClick: handleLogVaultTxn }, `Commit ${actionModal.type}`))))
             );
         }
@@ -1188,7 +1230,7 @@ e('footer', {
                 e('div', { style: { fontSize: 14, color: "var(--text-muted)", marginBottom: 24 } }, 'Audit historical ledger activities strictly related to isolated goals pools.'),
                 
                 e('div', { className: "premium-panel" },
-                    txns.length === 0 ? e('div', { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, "📋"), e("div", { className: "empty-state-title" }, "No vault activity yet"), e("div", { className: "empty-state-sub" }, "Deposits and withdrawals will appear here."))) :
+                    txns.length === 0 ? e('div', { style: { padding: "20px 0", textAlign: "center", color: "var(--text-muted)" } }, e("div", { className: "empty-state" }, e("div", { className: "empty-state-icon" }, e(Icon, { name: "clipboardlist", size: 28, color: "var(--text-muted)" })), e("div", { className: "empty-state-title" }, "No vault activity yet"), e("div", { className: "empty-state-sub" }, "Deposits and withdrawals will appear here."))) :
                     txns.map(t => e('div', { key: t.id, className: "stream-row" }, e('div', null, e('div', { style: { fontWeight: 600, color: "var(--text-main)" } }, getVaultName(t.fundId)), e('div', { style: { fontSize: 11, color: "var(--text-muted)", marginTop: 2, textTransform: "capitalize" } }, `${t.date} • ${t.type}`)), e('div', { style: S.row12 }, e('span', { style: { fontWeight: 700, color: t.type === 'deposit' ? "#00E676" : "#EF4444" } }, t.type === 'deposit' ? `+${fc(t.amountCents)}` : `-${fc(t.amountCents)}`), e(DotMenu, { itemId: t.id, openMenu, setOpenMenu, onEdit: () => openEditTxn(t), onDelete: () => deleteTxn(t.id) }))))
                 ),
                 editTxn && e('div', { className: "modal-overlay" }, e('div', { className: "modal-container" }, e('h3', { style: { marginBottom: 8 } }, "Edit Vault Transaction"), e('p', { style: { fontSize: 13, color: "var(--text-muted)", marginBottom: 20 } }, `Vault: ${getVaultName(editTxn.fundId)}`), e(Field, { label: "Transaction Type" }, e(Sel, { value: editTxnForm.type, onChange: ev => setEditTxnForm({ ...editTxnForm, type: ev.target.value }) }, e('option', { value: "deposit" }, "Deposit"), e('option', { value: "withdrawal" }, "Withdrawal"))), e(Field, { label: "Amount" }, e(Inp, { type: "number", value: editTxnForm.amount, onChange: ev => setEditTxnForm({ ...editTxnForm, amount: ev.target.value }) })), e(Field, { label: "Date" }, e(Inp, { type: "date", value: editTxnForm.date, onChange: ev => setEditTxnForm({ ...editTxnForm, date: ev.target.value }) })), e('div', { style: S.formFooter }, e(Btn, { v: "ghost", style: { flex: 1 }, onClick: () => setEditTxn(null) }, "Cancel"), e(Btn, { v: "primary", style: { flex: 1 }, onClick: saveEditTxn }, "Save Changes"))))
