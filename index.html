@@ -259,6 +259,7 @@
             modalFooter:{ display:"flex", gap:12, marginTop:24 },
             formFooter: { display:"flex", gap:12, marginTop:8 },
             pageHeader: { display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 },
+            statLabel:  { fontSize:11, fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", color:"var(--text-muted)", marginBottom:4 },
         };
 
         // ── LUCIDE SVG ICON PRIMITIVE ─────────────────────────────────────────
@@ -789,6 +790,8 @@ e('footer', {
             return e('div', null,
                 e('h2', { style: { fontSize: 22, fontWeight: 800, marginBottom: 24 } }, 'App Settings'),
                 
+                e(InsightStrip, { totals, bills, budgets, fc }),
+
                 e('div', { className: "dashboard-grid" },
                     e('div', { className: "premium-panel" },
                         e(SLabel, { style: { marginBottom: 16 } }, "Preferences"),
@@ -814,6 +817,28 @@ e('footer', {
                         )
                     )
                 )
+            );
+        }
+
+        // ── INSIGHT STRIP ─────────────────────────────────────────────────────
+        function InsightStrip({ totals, bills, budgets, fc }) {
+            const insights = [];
+            const daysLeft = Math.max(1, new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate() - new Date().getDate());
+            const safe = totals.netAvailable > 0 ? Math.floor(totals.netAvailable / daysLeft) : 0;
+            if (safe > 0) insights.push({ icon:"💡", text:`Safe to spend ${fc(safe)}/day`, c:"#00E676", bg:"rgba(0,230,118,0.08)" });
+            const dueSoon = bills.filter(b => !b.isPaid && getDaysRemaining(b.dueDate) >= 0 && getDaysRemaining(b.dueDate) <= 7).length;
+            if (dueSoon > 0) insights.push({ icon:"🧾", text:`${dueSoon} bill${dueSoon>1?"s":""} due this week`, c:"#F59E0B", bg:"rgba(245,158,11,0.08)" });
+            const overdue = bills.filter(b => !b.isPaid && getDaysRemaining(b.dueDate) < 0).length;
+            if (overdue > 0) insights.push({ icon:"⚠️", text:`${overdue} overdue`, c:"#EF4444", bg:"rgba(239,68,68,0.08)" });
+            const warnCat = CATEGORIES.find(k => { const b=budgets.find(x=>x.category===k); return b && safeDiv(totals.catSum[k]||0, b.limitCents) >= 0.8 && safeDiv(totals.catSum[k]||0, b.limitCents) < 1; });
+            if (warnCat) insights.push({ icon:"📊", text:`${warnCat} budget almost full`, c:"#FFD600", bg:"rgba(255,214,0,0.08)" });
+            const overCat = CATEGORIES.find(k => { const b=budgets.find(x=>x.category===k); return b && safeDiv(totals.catSum[k]||0, b.limitCents) >= 1; });
+            if (overCat) insights.push({ icon:"🔴", text:`${overCat} budget exceeded`, c:"#EF4444", bg:"rgba(239,68,68,0.08)" });
+            if (!insights.length) return null;
+            return e('div', { style:{ display:"flex", gap:8, overflowX:"auto", paddingBottom:4, marginBottom:20, scrollbarWidth:"none", msOverflowStyle:"none" } },
+                insights.map((ins,i) => e('div', { key:i, style:{ display:"flex", alignItems:"center", gap:6, background:ins.bg, border:`1px solid ${ins.c}25`, color:ins.c, padding:"7px 13px", borderRadius:20, fontSize:12, fontWeight:700, whiteSpace:"nowrap", flexShrink:0 } },
+                    e('span', null, ins.icon), e('span', null, ins.text)
+                ))
             );
         }
 
@@ -843,22 +868,11 @@ e('footer', {
                         e('div', { className: "balance-gradient-card" },
                             e(SLabel, { style: { color: "var(--text-light)", marginBottom: 6 } }, "Money left to spend"),
                             e('div', { style: { fontSize: 38, fontWeight: 800, color: "#00E676" } }, fc(totals.netAvailable)),
-                            (() => {
-                                const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
-                                const dayOfMonth  = new Date().getDate();
-                                const daysLeft    = Math.max(1, daysInMonth - dayOfMonth);
-                                const safeDailySpend = totals.netAvailable > 0 ? Math.floor(totals.netAvailable / daysLeft) : 0;
-                                return e('div', null,
-                                    e('div', { style: { display: "flex", gap: 40, marginTop: 28, borderTop: "1px solid var(--border)", paddingTop: 20 } },
-                                        e('div', null, e(SLabel, { style: { marginBottom: 4 } }, "Total Income"), e('div', { style: { fontSize: 16, fontWeight: 700, color: "var(--text-main)" } }, fc(totals.totalIncome))),
-                                        e('div', null, e(SLabel, { style: { marginBottom: 4 } }, "Total Spent"), e('div', { style: { fontSize: 16, fontWeight: 700, color: "var(--text-muted)" } }, fc(totals.totalDailySpent + totals.paidBills)))
-                                    ),
-                                    safeDailySpend > 0 && e('div', { className: "safe-chip" },
-                                        e('span', null, "💡"),
-                                        e('span', null, `Safe daily spend: ${fc(safeDailySpend)} / day (${daysLeft}d left)`)
-                                    )
-                                );
-                            })()
+                            e('div', { style:{ display:"flex", gap:32, marginTop:24, borderTop:"1px solid var(--border)", paddingTop:20 } },
+                                e('div', null, e(SLabel, { style:{ marginBottom:4 } }, "Income"), e('div', { style:{ fontSize:16, fontWeight:700, color:"var(--text-main)" } }, fc(totals.totalIncome))),
+                                e('div', null, e(SLabel, { style:{ marginBottom:4 } }, "Spent"), e('div', { style:{ fontSize:16, fontWeight:700, color:"var(--text-muted)" } }, fc(totals.totalDailySpent + totals.paidBills))),
+                                totals.unpaidBills > 0 && e('div', null, e(SLabel, { style:{ marginBottom:4 } }, "Pending Bills"), e('div', { style:{ fontSize:16, fontWeight:700, color:"#F59E0B" } }, fc(totals.unpaidBills)))
+                            )
                         ),
 
                         e('div', { className: "premium-panel" },
